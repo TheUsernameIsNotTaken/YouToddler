@@ -23,4 +23,4 @@ Here's what to do:
 5. Commit your changes in logical chunks.
 6. Push your branch to remote. `git push`
 7. Open a pull request.
-  * Make sure the title of your PR begins with the issues key! So for example `MAN-3 Create repository on Github` where `MAN-3` is the issue key.
+    *  Make sure the title of your PR begins with the issues key! So for example `MAN-3 Create repository on Github` where `MAN-3` is the issue key.
