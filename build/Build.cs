@@ -69,6 +69,7 @@ partial class Build : NukeBuild
         .Executes(() => {
             DotNetRun(_ => _
             .EnableNoBuild()
+            .EnableNoRestore()
             .SetProjectFile(YouToddlerCliCsprojPath));
         });
 
