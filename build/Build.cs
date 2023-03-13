@@ -1,18 +1,25 @@
-using System;
-using System.Linq;
 using Serilog;
 using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.Execution;
-using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.EnvironmentInfo;
-using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
+using Nuke.Common.CI.GitHubActions;
+
+[GitHubActions(
+    "build-all-and-validate-nightly",
+    GitHubActionsImage.Ubuntu2204,
+    GitHubActionsImage.WindowsLatest,
+    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
+    OnCronSchedule = "* 0 * * *",
+    AutoGenerate = true
+)]
+[GitHubActions(
+    "pr-pipeline",
+    GitHubActionsImage.UbuntuLatest,
+    InvokedTargets = new[] { nameof(CompileAll)},
+    OnPullRequestBranches = new[] { "master"},
+    AutoGenerate = true
+)]
 partial class Build : NukeBuild
 {
     /// Support plugins are available for:
