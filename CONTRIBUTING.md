@@ -43,7 +43,7 @@ Here's what to do:
 2. Create a new branch.
   1. Make sure you are on `master`
   2. `git pull`
-  3. `git checkout -b users/<yourgithubname>/<branchname>` So for example `users/cant0r/hotfixing-toddler` 
+  3. `git checkout -b <sprint-name>/<branchname>` So for example `setup-sprint/setting-up-github` 
 4. Make your changes on the new branch.
 5. Commit your changes in logical chunks.
 6. Push your branch to remote. `git push`
