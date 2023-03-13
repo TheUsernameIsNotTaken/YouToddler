@@ -20,6 +20,6 @@ tbd
 |GitHub Handler| Work|
 |:------------:|:----|
 |[@cant0r](https://github.com/cant0r/)|YouToddler Class Library and CLI|
-|m|YouToddler WebAPI|
-|szm|YouToddler Frontend|
-|jp|YouToddler Documentation, Demos, Sales|
+|[@TheUsernameIsNotTaken](https://github.com/)|YouToddler WebAPI|
+|[@szemand](https://github.com/szemand)|YouToddler Frontend|
+|[@Pajaik](https://github.com/Pajaik)|YouToddler Documentation, Demos, Sales|
