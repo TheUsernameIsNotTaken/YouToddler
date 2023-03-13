@@ -1,7 +1,8 @@
 *            @cant0r
 
-/webapi/     @TheUsernameIsNotTaken
-/backend/    @cant0r
-/frontend/   @szemand
+**/YouToddlerWebAPI/     @TheUsernameIsNotTaken
+**/YouToddlerCLI/    @cant0r
+**/Libs/YouToddler/    @cant0r
+**/YouToddlerFrontend/   @szemand
 /docs/       @Pajaik
 /demos/      @Pajaik
