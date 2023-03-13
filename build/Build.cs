@@ -15,7 +15,9 @@ using Nuke.Common.CI.GitHubActions;
 )]
 [GitHubActions(
     "pr-pipeline",
-    GitHubActionsImage.Ubuntu2204,
+    GitHubActionsImage.UbuntuLatest,
+    GitHubActionsImage.WindowsLatest,
+    GitHubActionsImage.MacOsLatest,
     InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
     OnPullRequestBranches = new[] { "master"},
     AutoGenerate = true
@@ -70,6 +72,7 @@ partial class Build : NukeBuild
             DotNetRun(_ => _
             .EnableNoBuild()
             .EnableNoRestore()
+            .SetConfiguration(Configuration)
             .SetProjectFile(YouToddlerCliCsprojPath));
         });
 
