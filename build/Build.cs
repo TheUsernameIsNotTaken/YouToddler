@@ -16,7 +16,7 @@ using Nuke.Common.CI.GitHubActions;
 [GitHubActions(
     "pr-pipeline",
     GitHubActionsImage.UbuntuLatest,
-    InvokedTargets = new[] { nameof(CompileAll)},
+    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
     OnPullRequestBranches = new[] { "master"},
     AutoGenerate = true
 )]
