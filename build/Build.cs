@@ -15,7 +15,7 @@ using Nuke.Common.CI.GitHubActions;
 )]
 [GitHubActions(
     "pr-pipeline",
-    GitHubActionsImage.UbuntuLatest,
+    GitHubActionsImage.Ubuntu2204,
     InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
     OnPullRequestBranches = new[] { "master"},
     AutoGenerate = true
@@ -49,13 +49,13 @@ partial class Build : NukeBuild
     Target CompileWebApi => _ => _
         .Executes(() =>
         {
-            Log.Warning("Here you'll be calling your build scripts for the WebAPI.");
+            Log.Information("Here you'll be calling your build scripts for the WebAPI.");
         });
 
     Target CompileFrontend => _ => _
         .Executes(() =>
         {
-            Log.Warning("Here you'll be calling your build scripts for the Frontend.");            
+            Log.Information("Here you'll be calling your build scripts for the Frontend.");            
         });
 
     Target CompileAll => _ => _
