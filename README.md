@@ -1,4 +1,5 @@
 # YouToddler
+[![build-all-and-validate-nightly](https://github.com/cant0r/YouToddler/actions/workflows/build-all-and-validate-nightly.yml/badge.svg)](https://github.com/cant0r/YouToddler/actions/workflows/build-all-and-validate-nightly.yml)  
 Group project of the people of the Manhattan Project.
 
 ## Description
