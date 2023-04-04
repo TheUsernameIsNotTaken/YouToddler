@@ -13,7 +13,7 @@ namespace YouToddler.History
             return new LogScroll(DateTime.Now, "", "");
         }
 
-        internal static int EraseLogs(DirectoryInfo directory)
+        internal static int EraseLogs(DirectoryInfo logDirectory)
         {
             return -1;
         }
