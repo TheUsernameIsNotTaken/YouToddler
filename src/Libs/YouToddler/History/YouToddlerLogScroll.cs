@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace YouToddler.History
 {
-    internal record class LogScroll(DateTime TimeStamp, string Sender, string Message);
+    public record class YouToddlerLogScroll(DateTime TimeStamp, string Sender, string Message);
 }
