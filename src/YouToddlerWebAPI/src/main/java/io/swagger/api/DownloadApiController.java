@@ -82,7 +82,7 @@ public class DownloadApiController implements DownloadApi {
                 byte[] zipBytes = java.nio.file.Files.readAllBytes(relIn);
                 String basedFile = Base64.getEncoder().encodeToString(zipBytes);
                 // TODO: Return downloaded video file.
-                return generateResponse(HttpStatus.NOT_IMPLEMENTED,
+                return generateResponse(HttpStatus.OK,
                         "base64", basedFile);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
