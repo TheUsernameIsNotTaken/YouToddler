@@ -29,6 +29,9 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -48,18 +51,45 @@ public class DownloadApiController implements DownloadApi {
         this.request = request;
     }
 
+    private ResponseEntity<ModelApiResponse> generateResponse(HttpStatus responseStatus, String typeString, String messageString) throws IOException{
+        return new ResponseEntity<ModelApiResponse>(objectMapper.readValue("{\n  " +
+                "\"code\" : " + responseStatus.value() + ",\n  " +
+                "\"type\" : \"" + typeString + "\",\n  " +
+                "\"message\" : \""+ messageString +
+                "\"\n}", ModelApiResponse.class), HttpStatus.NOT_IMPLEMENTED);
+    }
+
     public ResponseEntity<ModelApiResponse> getVideoData(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema( defaultValue="https://youtu.be/dQw4w9WgXcQ")) @Valid @RequestParam(value = "url", required = true, defaultValue="https://youtu.be/dQw4w9WgXcQ") String url,@Parameter(in = ParameterIn.QUERY, description = "ID of the video format" ,schema=@Schema()) @Valid @RequestParam(value = "videoID", required = false) Long videoID,@Parameter(in = ParameterIn.QUERY, description = "ID of the audio format" ,schema=@Schema()) @Valid @RequestParam(value = "audioID", required = false) Long audioID) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<ModelApiResponse>(objectMapper.readValue("{\n  \"code\" : 0,\n  \"type\" : \"type\",\n  \"message\" : \"message\"\n}", ModelApiResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                //Check if URl is present
+                if(url.equals(null) || url.isEmpty())
+                    return generateResponse(HttpStatus.BAD_REQUEST,
+                            "Error", "Invalid url");
+                // Check if an ID is present.
+                if(audioID == null && videoID == null){
+                    return generateResponse(HttpStatus.NOT_ACCEPTABLE,
+                            "Error", "Missing video AND audio id");
+                }
+                // TODO: Check if URL exists.
+                if(url.equals("NotValidVideo")){
+                    return generateResponse(HttpStatus.NOT_FOUND,
+                            "Error", "Unavailable or nonextistent video");
+                }
+                // TODO: Get video by URL. Or by ticket number if it gets changed.
+                Path relIn = Paths.get("example_files/Videjo.zip");
+                byte[] zipBytes = java.nio.file.Files.readAllBytes(relIn);
+                String basedFile = Base64.getEncoder().encodeToString(zipBytes);
+                // TODO: Return downloaded video file.
+                return generateResponse(HttpStatus.NOT_IMPLEMENTED,
+                        "base64", basedFile);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<ModelApiResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-        return new ResponseEntity<ModelApiResponse>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<ModelApiResponse>(HttpStatus.BAD_REQUEST);
     }
 
 }
