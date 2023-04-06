@@ -51,15 +51,26 @@ public class MetaApiController implements MetaApi {
     public ResponseEntity<Metadata> getVideoMeta(@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the object to fetch" ,required=true,schema=@Schema( defaultValue="https://youtu.be/dQw4w9WgXcQ")) @Valid @RequestParam(value = "url", required = true, defaultValue="https://youtu.be/dQw4w9WgXcQ") String url) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
+            // Check if URL is valid.
+            if(url.isEmpty() || url.equals(null)){
+                return new ResponseEntity<Metadata>(HttpStatus.NOT_ACCEPTABLE);
+            }
+            // TODO: Check if URL exists.
+            if(url.equals("NotValidVideo")) {
+                return new ResponseEntity<Metadata>(HttpStatus.NOT_FOUND);
+            }
             try {
-                return new ResponseEntity<Metadata>(objectMapper.readValue("{\n  \"formats\" : [ {\n    \"name\" : \"mp4\",\n    \"id\" : 22,\n    \"resolution\" : {\n      \"tbr\" : 446000,\n      \"video\" : {\n        \"vbr\" : 446000,\n        \"fps\" : 30,\n        \"videoCodec\" : \"avc1\"\n      },\n      \"audio\" : {\n        \"abr\" : 0,\n        \"audioCodec\" : \"mp4a\"\n      },\n      \"filesize\" : \"1,39MiB\"\n    }\n  }, {\n    \"name\" : \"mp4\",\n    \"id\" : 22,\n    \"resolution\" : {\n      \"tbr\" : 446000,\n      \"video\" : {\n        \"vbr\" : 446000,\n        \"fps\" : 30,\n        \"videoCodec\" : \"avc1\"\n      },\n      \"audio\" : {\n        \"abr\" : 0,\n        \"audioCodec\" : \"mp4a\"\n      },\n      \"filesize\" : \"1,39MiB\"\n    }\n  } ],\n  \"videoName\" : \"Example Name gone wrong! | !!!NOT CLICKBAIT!!!\",\n  \"imageUrl\" : \"https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg\",\n  \"url\" : \"https://youtu.be/dQw4w9WgXcQ\"\n}", Metadata.class), HttpStatus.NOT_IMPLEMENTED);
+                // TODO: Try to generate the metadata.
+                Metadata genMeta = objectMapper.readValue("{\n  \"formats\" : [ {\n    \"name\" : \"mp4\",\n    \"id\" : 22,\n    \"resolution\" : {\n      \"tbr\" : 446000,\n      \"video\" : {\n        \"vbr\" : 446000,\n        \"fps\" : 30,\n        \"videoCodec\" : \"avc1\"\n      },\n      \"audio\" : {\n        \"abr\" : 0,\n        \"audioCodec\" : \"mp4a\"\n      },\n      \"filesize\" : \"1,39MiB\"\n    }\n  }, {\n    \"name\" : \"mp4\",\n    \"id\" : 22,\n    \"resolution\" : {\n      \"tbr\" : 446000,\n      \"video\" : {\n        \"vbr\" : 446000,\n        \"fps\" : 30,\n        \"videoCodec\" : \"avc1\"\n      },\n      \"audio\" : {\n        \"abr\" : 0,\n        \"audioCodec\" : \"mp4a\"\n      },\n      \"filesize\" : \"1,39MiB\"\n    }\n  } ],\n  \"videoName\" : \"Example Name gone wrong! | !!!NOT CLICKBAIT!!!\",\n  \"imageUrl\" : \"https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg\",\n  \"url\" : \"https://youtu.be/dQw4w9WgXcQ\"\n}", Metadata.class);
+                // Return the generated metadata.
+                return new ResponseEntity<Metadata>(genMeta, HttpStatus.OK);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<Metadata>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-        return new ResponseEntity<Metadata>(HttpStatus.NOT_IMPLEMENTED);
+        // If the accept is not supported, then consider it as a bad request.
+        return new ResponseEntity<Metadata>(HttpStatus.BAD_REQUEST);
     }
 
 }
