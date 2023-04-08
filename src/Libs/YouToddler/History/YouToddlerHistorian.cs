@@ -10,37 +10,34 @@ namespace YouToddler.History
 {
     public static class YouToddlerHistorian
     {
-
-        static YouToddlerHistorian()
+        public static string AggregateLogs(DirectoryInfo logDirectory)
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
-        }
-
-        public static YouToddlerLogScroll AggregateLogs(DirectoryInfo logDirectory)
-        {
-            Log.Information("I'm about to head out");
-            Log.Information("Wtf");
-
-            throw new NotImplementedException();
+            StringBuilder aggregatedLogs = new StringBuilder();
+            aggregatedLogs.AppendLine("[");
+            var logFiles = logDirectory.EnumerateFiles("*jlog", SearchOption.AllDirectories).Select(f => f.FullName);
+            foreach (var logFile in logFiles)
+            {
+                foreach (var logEntry in File.ReadLines(logFile))
+                {
+                    aggregatedLogs.Append(logEntry);
+                    aggregatedLogs.AppendLine(",");
+                }
+            }
+            aggregatedLogs.AppendLine("]");
+            return aggregatedLogs.ToString();
         }
 
         public static int EraseLogs(DirectoryInfo logDirectory)
         {
-            var logFiles = logDirectory.EnumerateFiles("*.log", SearchOption.AllDirectories).ToArray();
-
+            var logFiles = logDirectory.EnumerateFiles("*jlog", SearchOption.AllDirectories).ToArray();
+            int logsDeleted = 0;
             foreach (var logFile in logFiles)
             {
                 logFile.Delete();
+                logsDeleted++;
             }
 
-            return logFiles.Length;
+            return logsDeleted;
         }
     }
 }
