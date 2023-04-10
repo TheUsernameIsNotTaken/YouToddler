@@ -14,7 +14,7 @@ namespace YouToddlerLib.Tests.Unit
     [TestFixture]
     public class YouToddlerHistorianTests
     {
-        private readonly string TestLogFilesDirectory = "TestLogs";
+        private const string TestLogFilesDirectory = "TestLogs";
 
         [OneTimeSetUp] public void SetUp() 
         {
