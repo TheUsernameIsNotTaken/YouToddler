@@ -7,9 +7,9 @@ using YouToddler.Models;
 
 namespace YouToddler.Artifactory
 {
-    internal interface IYouToddlerArtifactory
+    public interface IYouToddlerArtifactory
     {
-        internal Task CreateArtifact(YouToddlerContent youToddlerContent);
-        internal Task<bool> UploadArtifacts();
+        public void CreateArtifact();
+        public void UploadArtifact();
     }
 }
