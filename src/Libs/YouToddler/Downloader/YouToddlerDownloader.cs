@@ -9,11 +9,8 @@ namespace YouToddler.Downloader
 {
     internal class YouToddlerDownloader
     {
-        private YouToddlerRunner _runner;
-
-        public YouToddlerDownloader(YouToddlerRunner runner)
+        public YouToddlerDownloader()
         {
-            _runner = runner;
         }
 
         internal bool DownloadContent(string content)

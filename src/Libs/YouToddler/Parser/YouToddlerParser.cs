@@ -8,17 +8,16 @@ using YouToddler.Runner;
 
 namespace YouToddler.Parser
 {
-    internal class YouToddlerParser : IHttpBasedYouToddlerParser<YouToddlerContent>
+    internal class YouToddlerParser : IYouToddlerParser<YouToddlerContent>
     {
-        private YouToddlerRunner _youToddlerRunner;
         public YouToddlerContent? ParsedContent { get; set; }
 
-        public YouToddlerParser(YouToddlerRunner youToddlerRunner)
+        public YouToddlerParser()
         {
-            _youToddlerRunner = youToddlerRunner;
+
         }
 
-        public YouToddlerContent ParseMetadata(Uri url)
+        public YouToddlerContent ParseMetadata(string ytDlpOutput)
         {
             throw new NotImplementedException();
         }
