@@ -8,9 +8,8 @@ using YouToddler.Runner;
 
 namespace YouToddler.Parser
 {
-    internal class YouToddlerParser : IYouToddlerParser<YouToddlerContent>
+    public class YouToddlerParser : IYouToddlerParser<YouToddlerContent>
     {
-        public YouToddlerContent? ParsedContent { get; set; }
 
         public YouToddlerParser()
         {

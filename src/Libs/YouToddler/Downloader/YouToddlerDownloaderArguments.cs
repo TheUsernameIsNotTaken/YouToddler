@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace YouToddler.Downloader
 {
-    internal record class YouToddlerDownloaderArguments(int videoFormat, int audioFormat);
+    public record class YouToddlerDownloaderArguments(int videoFormat, int audioFormat);
 }

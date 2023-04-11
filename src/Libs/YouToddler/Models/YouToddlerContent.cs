@@ -1,6 +1,6 @@
 ﻿namespace YouToddler.Models
 {
-    internal record class YouToddlerContent(
+    public record class YouToddlerContent(
         string id,
         string videoTitle,
         string extension,

@@ -1,4 +1,4 @@
 ﻿namespace YouToddler.Models
 {
-    internal record class YouToddlerAudioFormat(string codec, int abr);
+    public record class YouToddlerAudioFormat(string codec, int abr);
 }
