@@ -1,7 +1,9 @@
-﻿namespace YouToddler.Parser
+﻿using YouToddler.Models;
+
+namespace YouToddler.Parser
 {
-    public interface IYouToddlerParser<T> where T : class
+    public interface IYouToddlerParser
     {
-        public T ParseMetadata(string ytDlpOutput);
+        public YouToddlerMediaContent[] ParseMetadata(string infoJsonDirectory);
     }
 }

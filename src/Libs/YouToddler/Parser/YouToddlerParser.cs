@@ -8,7 +8,7 @@ using YouToddler.Runner;
 
 namespace YouToddler.Parser
 {
-    public class YouToddlerParser : IYouToddlerParser<YouToddlerContent>
+    public class YouToddlerParser : IYouToddlerParser
     {
 
         public YouToddlerParser()
@@ -16,7 +16,7 @@ namespace YouToddler.Parser
 
         }
 
-        public YouToddlerContent ParseMetadata(string ytDlpOutput)
+        public YouToddlerMediaContent[] ParseMetadata(string infoJsonDirectory)
         {
             throw new NotImplementedException();
         }

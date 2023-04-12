@@ -1,13 +1,13 @@
 ﻿namespace YouToddler.Models
 {
-    public record class YouToddlerContent(
-        string id,
+    public record class YouToddlerMediaContent(
+        int id,
         string videoTitle,
         string extension,
         Uri thumbnailUrl,
         int fileSize,
         int tbr,
         string moreInfo,
-        YouToddlerAudioFormat[] audioFormats,
-        YouToddlerVideoFormat[] videoFormats);
+        YouToddlerAudioFormat audioFormat,
+        YouToddlerVideoFormat videoFormat);
 }
