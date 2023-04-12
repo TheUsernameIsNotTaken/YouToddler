@@ -18,11 +18,6 @@ namespace YouToddlerLib.Tests.Unit
 
         [OneTimeSetUp] public void SetUp() 
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.File(new JsonFormatter(), $"{TestLogFilesDirectory}/youtoddler.jlog", shared: true, rollOnFileSizeLimit: true, fileSizeLimitBytes: 8)
                 .CreateLogger();

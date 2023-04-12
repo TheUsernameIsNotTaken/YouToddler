@@ -12,11 +12,21 @@ namespace YouToddlerLib.Tests.Unit
     [TestFixture]
     public class YouToddlerLocalArtifactoryTests
     {
+        private IConfiguration configuration;
+
+        [OneTimeSetUp] 
+        public void SetUp() 
+        {
+            configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+        }
 
         [Test]
         public void CreateArtifact_ThrowsDirectoryException_WhenStagingDirectoryIsMissing()
         {
-            var artifactory = new YouToddlerLocalArtifactory();
+            var artifactory = new YouToddlerLocalArtifactory(configuration);
 
             Assert.That(() => artifactory.CreateArtifact(), Throws.Exception.TypeOf<DirectoryNotFoundException>());
         }
@@ -24,7 +34,7 @@ namespace YouToddlerLib.Tests.Unit
         public void CreateArtifact_ThrowsDirectoryException_WhenStagingDirectoryIsEmpty()
         {
 
-            var artifactory = new YouToddlerLocalArtifactory();
+            var artifactory = new YouToddlerLocalArtifactory(configuration);
             Directory.CreateDirectory(artifactory.Configuration.StagingDirectory);
 
             Assert.That(() => artifactory.CreateArtifact(), Throws.Exception.TypeOf<DirectoryNotFoundException>());
@@ -36,7 +46,7 @@ namespace YouToddlerLib.Tests.Unit
         public void CreateArtifact_ArchivesDownloadedContent_WhenContentAvailable()
         {
 
-            var artifactory = new YouToddlerLocalArtifactory();
+            var artifactory = new YouToddlerLocalArtifactory(configuration);
             Directory.CreateDirectory(artifactory.Configuration.StagingDirectory);
             File.WriteAllText($"{artifactory.Configuration.StagingDirectory}/bela1.txt", "Béla");
             File.WriteAllText($"{artifactory.Configuration.StagingDirectory}/bela2.txt", "Béla");
@@ -54,7 +64,7 @@ namespace YouToddlerLib.Tests.Unit
         public void UploadArtifact_ThrowsFileNotFoundException_WhenArtifactStagingDirectoryIsEmpty()
         {
 
-            var artifactory = new YouToddlerLocalArtifactory();
+            var artifactory = new YouToddlerLocalArtifactory(configuration);
             Directory.CreateDirectory(artifactory.Configuration.StagingDirectory);
 
             Assert.That(() => artifactory.UploadArtifact(), Throws.Exception.TypeOf<FileNotFoundException>());
@@ -66,7 +76,7 @@ namespace YouToddlerLib.Tests.Unit
         public void UploadArtifact_ArchivesDownloadedContent_WhenContentAvailable()
         {
 
-            var artifactory = new YouToddlerLocalArtifactory();
+            var artifactory = new YouToddlerLocalArtifactory(configuration);
             Directory.CreateDirectory(artifactory.Configuration.StagingDirectory);
             File.WriteAllText($"{artifactory.Configuration.StagingDirectory}/bela1.txt", "Béla");
             File.WriteAllText($"{artifactory.Configuration.StagingDirectory}/bela2.txt", "Béla");
