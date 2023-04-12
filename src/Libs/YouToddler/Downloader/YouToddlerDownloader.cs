@@ -93,7 +93,8 @@ namespace YouToddler.Downloader
                     throw new InvalidOperationException(msg);
                 }
 
-                contentMetadata = _youToddlerParser.ParseMetadata(Configuration.StagingDirectory);
+                FileInfo infoJson = new DirectoryInfo(Configuration.StagingDirectory).GetFiles("*info.json").First();
+                contentMetadata = _youToddlerParser.ParseMetadata(infoJson);
                 CleanStagingDirectory();
                 _youToddlerContentCache.TryAdd(content, contentMetadata);
             }

@@ -10,11 +10,6 @@ namespace YouToddler.Artifactory
         public YouToddlerConfiguration Configuration { get; private set; }
         public YouToddlerLocalArtifactory(IConfiguration configuration)
         {
-            /*IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();*/
-
             Configuration = configuration.GetSection("YouToddlerConfiguration").Get<YouToddlerConfiguration>();
             Directory.CreateDirectory(Configuration.ArtifactStagingDirectory);
             Directory.CreateDirectory(Configuration.ArtifactUploadDestination);
