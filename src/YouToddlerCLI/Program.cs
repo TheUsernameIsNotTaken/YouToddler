@@ -14,7 +14,6 @@ using YouToddlerCLI.Options;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
-        .SetBasePath (Directory.GetCurrentDirectory ())
         .AddJsonFile("appsettings.json")
         .Build ();
 
