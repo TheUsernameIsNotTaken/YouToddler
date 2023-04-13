@@ -12,6 +12,7 @@ namespace YouToddler.History
         {
             StringBuilder aggregatedLogs = new StringBuilder();
             aggregatedLogs.AppendLine("[");
+            Log.CloseAndFlush();
             var logFiles = logDirectory.EnumerateFiles("*jlog", SearchOption.AllDirectories).Select(f => f.FullName);
             foreach (var logFile in logFiles)
             {
