@@ -14,9 +14,9 @@ namespace YouToddler.Downloader
         private const string _writeMetadataArgument = "--write-info-json --skip-download";
 
         public YouToddlerConfiguration Configuration { get; private set; }
-        private YouToddlerParser _youToddlerParser;
+        private IYouToddlerParser _youToddlerParser;
         private Dictionary<Uri, YouToddlerMediaContent[]> _youToddlerContentCache;
-        public YouToddlerDownloader(IConfiguration configuration, YouToddlerParser youToddlerParser)
+        public YouToddlerDownloader(IConfiguration configuration, IYouToddlerParser youToddlerParser)
         {
             Configuration = configuration.GetSection("YouToddlerConfiguration").Get<YouToddlerConfiguration>();
             Directory.CreateDirectory(Configuration.StagingDirectory);
@@ -25,7 +25,7 @@ namespace YouToddler.Downloader
             _youToddlerContentCache = new Dictionary<Uri, YouToddlerMediaContent[]>();
         }
 
-        public bool DownloadContent(Uri content)
+        public void DownloadContent(Uri content)
         {
             CleanStagingDirectory();
             Log.Information("Downloading content in the best default format.", content);
@@ -41,9 +41,8 @@ namespace YouToddler.Downloader
                 Log.Fatal(msg, result.output, content);
                 throw new InvalidOperationException(msg);
             }
-            return true;
         }
-        public bool DownloadContent(Uri content, YouToddlerDownloaderArguments args)
+        public void DownloadContent(Uri content, YouToddlerDownloaderArguments args)
         {
             CleanStagingDirectory();
             bool areArgsValid = ValidateDownloadArguments(content, args);
@@ -68,7 +67,6 @@ namespace YouToddler.Downloader
                 Log.Fatal(msg, result.output, content);
                 throw new InvalidOperationException(msg);
             }
-            return true;
         }
 
         public YouToddlerMediaContent[] DownloadContentMetadata(Uri content)

@@ -6,8 +6,19 @@ Group project of the people of the Manhattan Project.
 An on-premise download manager for youtube-dlp.
 
 ## Installation Guide
-Download the latest release artifact and run the appropriate startup script.  
-On Linux-based systems: `./start.sh`
+Download the latest release artifact.
+* For the Web Interface run the appropriate `start` script for you environment.
+* For the CLI just invoke the tool with the desired arguments.
+
+### YouToddler CLI examples
+Downloading metadata   
+`.\YouToddlerCLI describe -t https://www.youtube.com/watch?v=ycHVUvvOwzY`  
+Downloading video content   
+`.\YouToddlerCLI download -v 136 -a 140 -t https://www.youtube.com/watch?v=ycHVUvvOwzY`  
+Downloading user history   
+`.\YouToddlerCLI history`  
+Cleaning up working directories   
+`.\YouToddlerCLI clean`    
 
 ## Documentation
 [Here](https://github.com/cant0r/YouToddler/tree/master/docs)
@@ -26,6 +37,6 @@ Please visit the [CONTRIBUTING.MD](https://github.com/cant0r/YouToddler/blob/mas
 |GitHub Handler| Work|
 |:------------:|:----|
 |[@cant0r](https://github.com/cant0r/)|YouToddler Class Library and CLI|
-|[@TheUsernameIsNotTaken](https://github.com/)|YouToddler WebAPI|
+|[@TheUsernameIsNotTaken](https://github.com/TheUsernameIsNotTaken)|YouToddler WebAPI|
 |[@szemand](https://github.com/szemand)|YouToddler Frontend|
 |[@Pajaik](https://github.com/Pajaik)|YouToddler Documentation, Demos, Sales|

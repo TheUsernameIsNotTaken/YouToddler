@@ -2,7 +2,7 @@
 {
     public interface IYouToddlerArtifactory
     {
-        public void CreateArtifact();
-        public void UploadArtifact();
+        public string CreateArtifact();
+        public void UploadArtifact(string artifactFilename);
     }
 }
