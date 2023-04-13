@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "YouToddlerCLI": {
-      "commandName": "Project",
-      "commandLineArgs": "clean"
-    }
-  }
-}

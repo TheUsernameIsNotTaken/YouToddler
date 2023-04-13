@@ -32,12 +32,23 @@ static int RunCleanCommand(CleanOptions copts, IConfiguration configuration)
 {
     YouToddlerConfiguration youToddlerConfiguration = configuration.GetSection("YouToddlerConfiguration").Get<YouToddlerConfiguration>();
     Log.Warning("Running clean command");
-    Directory.Delete(youToddlerConfiguration.ArtifactStagingDirectory, true);
-    Log.Information($"Deleted directory: {youToddlerConfiguration.ArtifactStagingDirectory}");
-    Directory.Delete(youToddlerConfiguration.ArtifactUploadDestination, true);
-    Log.Information($"Deleted directory: {youToddlerConfiguration.ArtifactUploadDestination}");
-    Directory.Delete(youToddlerConfiguration.StagingDirectory, true);
-    Log.Information($"Deleted directory: {youToddlerConfiguration.StagingDirectory}");
+    SafelyDeleteDirectory(youToddlerConfiguration.StagingDirectory);
+    SafelyDeleteDirectory(youToddlerConfiguration.ArtifactStagingDirectory);
+    SafelyDeleteDirectory(youToddlerConfiguration.ArtifactUploadDestination);
+    return 0;
+}
+
+static int SafelyDeleteDirectory(string directory)
+{
+    try
+    {
+        Directory.Delete(directory, true);
+        Log.Information($"Deleted directory: {directory}");
+    }
+    catch (DirectoryNotFoundException dnfe)
+    {
+        Log.Information($"Already delted directory: {directory}");
+    }
     return 0;
 }
 
