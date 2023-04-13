@@ -26,23 +26,30 @@ namespace YouToddler.Parser
             }
 
             string mediaTitle = root["title"]!.GetValue<string>();
-            Uri mediaThumbnailUri = root["thumbnail"]!.GetValue<Uri>();
+            Uri mediaThumbnailUri = new Uri(root["thumbnail"]!.GetValue<string>());
 
             JsonArray formatObjects = root["formats"]!.AsArray();
 
-            return formatObjects.Where(o => o["format_node"]!.GetValue<string>() != "storyboard")
+            return formatObjects.Where(o => o["format_note"]!.GetValue<string>() != "storyboard")
                 .Select(m =>
                 {
-                    var audio = new YouToddlerAudioFormat(m["acodec"]!.GetValue<string>(), m["abr"]!.GetValue<int>());
-                    var video = new YouToddlerVideoFormat(m["vcodec"]!.GetValue<string>(), m["vbr"]!.GetValue<int>(), m["fps"]!.GetValue<int>());
+                    var audio = new YouToddlerAudioFormat(
+                        m["acodec"]?.GetValue<string>() ?? "none",
+                        (int)(m["abr"]?.GetValue<float>() ?? -1));
+
+                    var video = new YouToddlerVideoFormat(
+                        m["vcodec"]?.GetValue<string>() ?? "none",
+                        (int)(m["vbr"]?.GetValue<float>() ?? -1),
+                        (int)(m["fps"]?.GetValue<float>() ?? -1));
+
                     return new YouToddlerMediaContent(
-                        m["format_id"]!.GetValue<int>(),
+                        Convert.ToInt32(m["format_id"]!.GetValue<string>()),
                         mediaTitle,
                         m["ext"]!.GetValue<string>(),
                         mediaThumbnailUri,
-                        m["filesize"]!.GetValue<int>(),
-                        m["tbr"]!.GetValue<int>(),
-                        m["moreinfo"]!.GetValue<string>(),
+                        (m["filesize"]?.GetValue<int>() ?? m["filesize_approx"]?.GetValue<int>()) ?? -1,
+                        (int)m["tbr"]!.GetValue<float>(),
+                        m["moreinfo"]?.GetValue<string>() ?? "none",
                         audio,
                         video);
                 }).ToArray();
