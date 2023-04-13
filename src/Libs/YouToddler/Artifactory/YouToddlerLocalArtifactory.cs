@@ -15,8 +15,9 @@ namespace YouToddler.Artifactory
             Directory.CreateDirectory(Configuration.ArtifactUploadDestination);
         }
 
-        public void CreateArtifact()
+        public string CreateArtifact()
         {
+            string newArtifactName = $"ytoddler-download-{((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds()}.zip";
             Log.Debug("Checking existance of the staging directory.");
             if (Directory.Exists(Configuration.StagingDirectory) && Directory.GetFiles(Configuration.StagingDirectory).Length > 0)
             {
@@ -33,21 +34,22 @@ namespace YouToddler.Artifactory
                 Configuration.StagingDirectory,
                 Path.Combine(
                     Configuration.ArtifactStagingDirectory,
-                    $"ytoddler-download-{((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds()}.zip"));
-            Log.Information("Created ZIP artifact.");
+                    newArtifactName));
+            Log.Information($"Created ZIP artifact '{newArtifactName}' in {Path.GetFullPath(Configuration.ArtifactStagingDirectory)}.");
             Log.Information("Cleaning up staging directory.");
             foreach (var file in Directory.GetFiles(Configuration.StagingDirectory))
             {
                 File.Delete(file);
             }
             Log.Information("Cleaned up staging directory.");
+            return newArtifactName;
         }
 
-        public void UploadArtifact()
+        public void UploadArtifact(string artifactFilename)
         {
             var artifact = Directory.EnumerateFiles(
                 Configuration.ArtifactStagingDirectory,
-                "*zip",
+                artifactFilename,
                 SearchOption.AllDirectories).FirstOrDefault(string.Empty);
             if (!string.IsNullOrEmpty(artifact))
             {
@@ -55,7 +57,7 @@ namespace YouToddler.Artifactory
                 File.Copy(
                     artifact,
                     Path.Combine(Configuration.ArtifactUploadDestination, Path.GetFileName(artifact)));
-                Log.Information("Uploaded artifact to local artifactory repository.");
+                Log.Information($"Uploaded artifact '{artifactFilename}' to local artifactory repository: {Path.GetFullPath(Configuration.ArtifactUploadDestination)}.");
             }
             else
             {

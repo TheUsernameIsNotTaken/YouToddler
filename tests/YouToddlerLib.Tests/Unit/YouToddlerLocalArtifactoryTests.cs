@@ -67,7 +67,7 @@ namespace YouToddlerLib.Tests.Unit
             var artifactory = new YouToddlerLocalArtifactory(configuration);
             Directory.CreateDirectory(artifactory.Configuration.StagingDirectory);
 
-            Assert.That(() => artifactory.UploadArtifact(), Throws.Exception.TypeOf<FileNotFoundException>());
+            Assert.That(() => artifactory.UploadArtifact("hehe"), Throws.Exception.TypeOf<FileNotFoundException>());
 
             Directory.Delete(artifactory.Configuration.StagingDirectory);
         }
@@ -82,8 +82,8 @@ namespace YouToddlerLib.Tests.Unit
             File.WriteAllText($"{artifactory.Configuration.StagingDirectory}/bela2.txt", "Béla");
             File.WriteAllText($"{artifactory.Configuration.StagingDirectory}/bela3.txt", "Béla");
 
-            artifactory.CreateArtifact();
-            artifactory.UploadArtifact();
+            var filename = artifactory.CreateArtifact();
+            artifactory.UploadArtifact(filename);
 
             Assert.That(new DirectoryInfo(artifactory.Configuration.ArtifactUploadDestination), Is.Not.Empty);
             Assert.That(new DirectoryInfo(artifactory.Configuration.ArtifactUploadDestination).GetFiles(), Has.Exactly(1).Items);

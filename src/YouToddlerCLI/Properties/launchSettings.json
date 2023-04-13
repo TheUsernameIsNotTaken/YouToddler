@@ -2,7 +2,7 @@
   "profiles": {
     "YouToddlerCLI": {
       "commandName": "Project",
-      "commandLineArgs": "describe -t https://www.youtube.com/watch?v=ycHVUvvOwzY"
+      "commandLineArgs": "clean"
     }
   }
 }

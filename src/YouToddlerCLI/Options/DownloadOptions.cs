@@ -9,8 +9,8 @@ namespace YouToddlerCLI.Options
         public string? VideoUriLink { get; set; }
 
         [Option('v', "videoFormatId", HelpText = "The id of the video media track of the input content you want to download.")]
-        public int? VideoFormatId { get; set; }
+        public int VideoFormatId { get; set; }
         [Option('a', "audioFormatId", HelpText = "The id of the audio media track of the input content you want to download.")]
-        public int? AudioFormatId { get; set; }
+        public int AudioFormatId { get; set; }
     }
 }
