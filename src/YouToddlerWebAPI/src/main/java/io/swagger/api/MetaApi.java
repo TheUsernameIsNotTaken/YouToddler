@@ -45,7 +45,9 @@ public interface MetaApi {
         @ApiResponse(responseCode = "404", description = "Unavailable or nonextistent video"),
         
         @ApiResponse(responseCode = "406", description = "Missing URL"),
-        
+
+        @ApiResponse(responseCode = "408", description = "Timeout"),
+
         @ApiResponse(responseCode = "500", description = "Internal Server error while generating response.") })
     @RequestMapping(value = "/meta",
         produces = { "application/json", "application/xml" }, 

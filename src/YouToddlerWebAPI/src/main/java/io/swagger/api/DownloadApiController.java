@@ -2,42 +2,37 @@ package io.swagger.api;
 
 import io.swagger.model.ModelApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.*;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-06T21:09:37.363059348Z[GMT]")
 @RestController
 public class DownloadApiController implements DownloadApi {
+
+    final String CLI_SUBPATH = "YouToddlerCLI\\bin\\Debug\\net7.0";
 
     private static final Logger log = LoggerFactory.getLogger(DownloadApiController.class);
 
@@ -59,6 +54,70 @@ public class DownloadApiController implements DownloadApi {
                 "\"\n}", ModelApiResponse.class), HttpStatus.NOT_IMPLEMENTED);
     }
 
+    private class ZipFinder{
+        private boolean defined;
+        private String zipName;
+
+        public ZipFinder() {
+            defined = false;
+            zipName = null;
+        }
+
+        boolean isDefined() {
+            return defined;
+        }
+
+        void setDefined(boolean defined) {
+            this.defined = defined;
+        }
+
+        String getZipName() {
+            return zipName;
+        }
+
+        void setZipName(String zipName) {
+            this.zipName = zipName;
+        }
+    }
+
+    //Runtime exector class
+    private static class StreamGobbler implements Runnable {
+        private InputStream inputStream;
+        private Consumer<String> consumer;
+
+
+        public StreamGobbler(InputStream inputStream, Consumer<String> consumer) {
+            this.inputStream = inputStream;
+            this.consumer = consumer;
+        }
+
+        @Override
+        public void run() {
+            new BufferedReader(new InputStreamReader(inputStream)).lines()
+                    //.filter(x -> x.matches("^(.+?)'(.+?)'(.+?)$"))
+                    .forEach(consumer);
+        }
+    }
+
+    private static class ExecConsumer implements Consumer<String>{
+        //Pattern filePattern = Pattern.compile("^(.+?)'(.+?)'(.+?)$");
+
+        private ZipFinder zipFinder;
+
+        public ExecConsumer(ZipFinder zipFinder) {
+            this.zipFinder = zipFinder;
+        }
+
+        @Override
+        public void accept(String s) {
+            String[] strArr = s.split("'", 3);
+            if(strArr.length == 3){
+                zipFinder.setDefined(true);
+                zipFinder.setZipName(strArr[1]);
+            }
+        }
+    }
+
     public ResponseEntity<ModelApiResponse> getVideoData(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema( defaultValue="https://youtu.be/dQw4w9WgXcQ")) @Valid @RequestParam(value = "url", required = true, defaultValue="https://youtu.be/dQw4w9WgXcQ") String url,@Parameter(in = ParameterIn.QUERY, description = "ID of the video format" ,schema=@Schema()) @Valid @RequestParam(value = "videoID", required = false) Long videoID,@Parameter(in = ParameterIn.QUERY, description = "ID of the audio format" ,schema=@Schema()) @Valid @RequestParam(value = "audioID", required = false) Long audioID) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
@@ -68,25 +127,93 @@ public class DownloadApiController implements DownloadApi {
                     return generateResponse(HttpStatus.BAD_REQUEST,
                             "Error", "Invalid url");
                 // Check if an ID is present.
-                if(audioID == null && videoID == null){
+                 if(audioID == null || videoID == null){
                     return generateResponse(HttpStatus.NOT_ACCEPTABLE,
-                            "Error", "Missing video AND audio id");
+                                "Error", "Missing video OR audio id");
                 }
                 // TODO: Check if URL exists.
                 if(url.equals("NotValidVideo")){
                     return generateResponse(HttpStatus.NOT_FOUND,
                             "Error", "Unavailable or nonextistent video");
                 }
-                // TODO: Get video by URL. Or by ticket number if it gets changed.
-                Path relIn = Paths.get("example_files/Videjo.zip");
-                byte[] zipBytes = java.nio.file.Files.readAllBytes(relIn);
-                String basedFile = Base64.getEncoder().encodeToString(zipBytes);
-                // TODO: Return downloaded video file.
-                return generateResponse(HttpStatus.OK,
-                        "base64", basedFile);
+                // Needed main paths of operation
+                Path runParent = Paths.get("").toRealPath().getParent();
+                Path toddlerCliDir = Paths.get(runParent.toString(),CLI_SUBPATH);
+                //  - Read in staging directory from file
+                Path settingJson = Paths.get(toddlerCliDir.toString(), "appsettings.json");
+                Object o = new JSONParser().parse(new FileReader(settingJson.toString()));
+                JSONObject j = (JSONObject) o;
+                JSONObject YouToddlerConfiguration = (JSONObject) j.get("YouToddlerConfiguration");
+                String StagingDirectory = (String) YouToddlerConfiguration.get("StagingDirectory");
+                String ArtifactUploadDestination = (String) YouToddlerConfiguration.get("ArtifactUploadDestination");
+                Path toddlerStaging = Paths.get(toddlerCliDir.toString(), StagingDirectory);
+                Path toddlerArtifact = Paths.get(toddlerCliDir.toString(), ArtifactUploadDestination);
+                // Generate command
+                //  - Check os
+                boolean isWindows = System.getProperty("os.name")
+                        .toLowerCase().startsWith("windows");
+                log.info(toddlerCliDir.toString());
+                //  - Get video by URL.
+                ProcessBuilder builder = new ProcessBuilder();
+                //String url_str = "https://www.youtube.com/watch?v=ycHVUvvOwzY";
+                log.info("Starting builder for " + url);
+                if (isWindows) {
+                    builder.command("powershell.exe", ".\\YouToddlerCLI", "download",
+                            videoID != null ? ("-v " + Long.toString(videoID)) : (""),
+                            audioID != null ? ("-a " + Long.toString(audioID)) : (""),
+                            "-t", url);
+                } else {
+                    builder.command("sh", "./YouToddlerCLI", "download",
+                            videoID != null ? ("-v " + Long.toString(videoID)) : (""),
+                            audioID != null ? ("-a " + Long.toString(audioID)) : (""),
+                            "-t", url);
+                }
+                builder.directory(new File(toddlerCliDir.toString()));
+                log.info("Builded command: " + builder.command().toString());
+                Process process = builder.start();
+                //  - gobble up the proccess
+                ZipFinder downloadedZip = new ZipFinder();
+                Consumer<String> execConsumer = new ExecConsumer(downloadedZip);
+                log.info("Starting proccess gobbler.");
+                StreamGobbler streamGobbler =
+                        new StreamGobbler(
+                                process.getInputStream(),
+                                ((Consumer<String>) System.out::println).andThen(execConsumer));
+                log.info("Starting download execution.");
+                Future<?> future = Executors.newSingleThreadExecutor().submit(streamGobbler);
+                int exitCode = process.waitFor();
+                assert exitCode == 0;
+                future.get(150, TimeUnit.SECONDS);
+                log.info("Finished download execution.");
+                // Check if download is successfull
+                if(downloadedZip.isDefined()){
+                    // Generate bytes
+                    Path zipVideoPath = Paths.get(toddlerArtifact.toString(), downloadedZip.getZipName());
+                    log.info(zipVideoPath.toString());
+                    byte[] zipBytes = Files.readAllBytes(zipVideoPath);
+                    String basedFile = Base64.getEncoder().encodeToString(zipBytes);
+                    // Return downloaded video file.
+                    return generateResponse(HttpStatus.OK,
+                            "base64", basedFile);
+                }else{
+                    return generateResponse(HttpStatus.NOT_FOUND,
+                            "Error", "Not found video id, audio id, or url.");
+                }
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<ModelApiResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (ParseException e){
+                log.error("Couldn't parse co-working paths", e);
+                return new ResponseEntity<ModelApiResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (InterruptedException e) {
+                log.error("Interupted download execution", e);
+                return new ResponseEntity<ModelApiResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (ExecutionException e) {
+                log.error("Error during download execution", e);
+                return new ResponseEntity<ModelApiResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (TimeoutException e) {
+                log.error("Timeout during download", e);
+                return new ResponseEntity<ModelApiResponse>(HttpStatus.REQUEST_TIMEOUT);
             }
         }
         return new ResponseEntity<ModelApiResponse>(HttpStatus.BAD_REQUEST);

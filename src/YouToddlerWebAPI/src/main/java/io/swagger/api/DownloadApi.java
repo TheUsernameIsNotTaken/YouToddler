@@ -44,8 +44,10 @@ public interface DownloadApi {
         
         @ApiResponse(responseCode = "404", description = "Unavailable or nonextistent video"),
         
-        @ApiResponse(responseCode = "406", description = "Missing video AND audio id"),
-        
+        @ApiResponse(responseCode = "406", description = "Missing video OR audio id"),
+
+        @ApiResponse(responseCode = "408", description = "Timeout"),
+
         @ApiResponse(responseCode = "500", description = "Internal Server error while generating response.") })
     @RequestMapping(value = "/download",
         produces = { "application/json", "application/xml" }, 
