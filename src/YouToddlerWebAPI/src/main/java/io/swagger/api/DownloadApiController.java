@@ -24,15 +24,11 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.concurrent.*;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-06T21:09:37.363059348Z[GMT]")
 @RestController
 public class DownloadApiController implements DownloadApi {
-
-    final String CLI_SUBPATH = "YouToddlerCLI\\bin\\Debug\\net7.0";
 
     private static final Logger log = LoggerFactory.getLogger(DownloadApiController.class);
 
@@ -81,25 +77,6 @@ public class DownloadApiController implements DownloadApi {
         }
     }
 
-    //Runtime exector class
-    private static class StreamGobbler implements Runnable {
-        private InputStream inputStream;
-        private Consumer<String> consumer;
-
-
-        public StreamGobbler(InputStream inputStream, Consumer<String> consumer) {
-            this.inputStream = inputStream;
-            this.consumer = consumer;
-        }
-
-        @Override
-        public void run() {
-            new BufferedReader(new InputStreamReader(inputStream)).lines()
-                    //.filter(x -> x.matches("^(.+?)'(.+?)'(.+?)$"))
-                    .forEach(consumer);
-        }
-    }
-
     //Zip search consumer
     private static class ExecConsumer implements Consumer<String>{
         //Pattern filePattern = Pattern.compile("^(.+?)'(.+?)'(.+?)$");
@@ -133,21 +110,24 @@ public class DownloadApiController implements DownloadApi {
                     return generateResponse(HttpStatus.NOT_ACCEPTABLE,
                             "Error", "Missing video OR audio id");
                 }
-                // TODO: Check if URL exists.
+                /*
+                //Check if URL exists. - Unneded, done by YouToddlerCLI
                 if(url.equals("NotValidVideo")){
                     return generateResponse(HttpStatus.NOT_FOUND,
                             "Error", "Unavailable or nonextistent video");
                 }
+                */
                 // Needed main paths of operation
                 Path runParent = Paths.get("").toRealPath().getParent();
-                Path toddlerCliDir = Paths.get(runParent.toString(),CLI_SUBPATH);
-                //  - Read in staging directory from file
+                Path toddlerCliDir = Paths.get(runParent.toString(),MetaApiController.CLI_SUBPATH);
+                //  - Read in staging directories from file
                 Path settingJson = Paths.get(toddlerCliDir.toString(), "appsettings.json");
                 Object o = new JSONParser().parse(new FileReader(settingJson.toString()));
                 JSONObject j = (JSONObject) o;
                 JSONObject YouToddlerConfiguration = (JSONObject) j.get("YouToddlerConfiguration");
                 String StagingDirectory = (String) YouToddlerConfiguration.get("StagingDirectory");
                 String ArtifactUploadDestination = (String) YouToddlerConfiguration.get("ArtifactUploadDestination");
+                //  - Generate staging and artifact paths.
                 Path toddlerStaging = Paths.get(toddlerCliDir.toString(), StagingDirectory);
                 Path toddlerArtifact = Paths.get(toddlerCliDir.toString(), ArtifactUploadDestination);
                 // Generate command
@@ -171,21 +151,21 @@ public class DownloadApiController implements DownloadApi {
                             "-t", url);
                 }
                 builder.directory(new File(toddlerCliDir.toString()));
-                log.info("Builded command: " + builder.command().toString());
+                //log.info("Builded command: " + builder.command().toString());
                 Process process = builder.start();
                 //  - gobble up the proccess
                 ZipFinder downloadedZip = new ZipFinder();
                 Consumer<String> execConsumer = new ExecConsumer(downloadedZip);
                 log.info("Starting proccess gobbler.");
-                StreamGobbler streamGobbler =
-                        new StreamGobbler(
+                MetaApiController.StreamGobbler streamGobbler =
+                        new MetaApiController.StreamGobbler(
                                 process.getInputStream(),
                                 ((Consumer<String>) System.out::println).andThen(execConsumer));
                 log.info("Starting download execution.");
                 Future<?> future = Executors.newSingleThreadExecutor().submit(streamGobbler);
                 int exitCode = process.waitFor();
                 assert exitCode == 0;
-                future.get(150, TimeUnit.SECONDS);
+                future.get(600, TimeUnit.SECONDS);
                 log.info("Finished download execution.");
                 // Check if download is successfull
                 if(downloadedZip.isDefined()){
