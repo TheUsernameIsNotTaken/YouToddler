@@ -51,9 +51,10 @@ public class DownloadApiController implements DownloadApi {
                 "\"code\" : " + responseStatus.value() + ",\n  " +
                 "\"type\" : \"" + typeString + "\",\n  " +
                 "\"message\" : \""+ messageString +
-                "\"\n}", ModelApiResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                "\"\n}", ModelApiResponse.class), responseStatus);
     }
 
+    //Zip file name holder class
     private class ZipFinder{
         private boolean defined;
         private String zipName;
@@ -99,6 +100,7 @@ public class DownloadApiController implements DownloadApi {
         }
     }
 
+    //Zip search consumer
     private static class ExecConsumer implements Consumer<String>{
         //Pattern filePattern = Pattern.compile("^(.+?)'(.+?)'(.+?)$");
 
@@ -126,10 +128,10 @@ public class DownloadApiController implements DownloadApi {
                 if(url.equals(null) || url.isEmpty())
                     return generateResponse(HttpStatus.BAD_REQUEST,
                             "Error", "Invalid url");
-                // Check if an ID is present.
-                 if(audioID == null || videoID == null){
+                // Check if all ID is present.
+                if(audioID == null || videoID == null){
                     return generateResponse(HttpStatus.NOT_ACCEPTABLE,
-                                "Error", "Missing video OR audio id");
+                            "Error", "Missing video OR audio id");
                 }
                 // TODO: Check if URL exists.
                 if(url.equals("NotValidVideo")){
