@@ -1,0 +1,134 @@
+html #light{
+  background-color: white;
+}
+
+html #dark{
+  background-color: #282c34;
+  color: white;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.linkQuery {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  padding-top: 30px
+}
+
+input {
+  width: 50%;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-right: 20px;
+  background-color: rgb(200, 200, 200);
+  font-family: 'Consolas';
+}
+
+.header {
+  width: 100vw;
+  display: flex;
+  background-color: rgb(115, 115, 255);
+}
+
+.details {
+  flex: 100%;
+  width: 50%;
+  padding-bottom: 1em;
+}
+
+.navbtn {
+  background-color: rgb(115, 115, 255);
+  border: none;
+  color: white
+}
+
+.navbtn:hover {
+  background-color: rgb(76, 76, 156);
+}
+
+#mode {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+#submitbtn {
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: rgb(200, 200, 200);
+}
+
+#submitbtn:hover {
+  background-color: rgb(59, 255, 59);
+}
+
+table {
+  border-collapse: collapse;
+  border: 2px solid purple;
+  table-layout: fixed;
+  width: 50%;
+  margin-left: auto;  
+  margin-right: auto;  
+}
+
+#ytoddler {
+  margin: 10px;
+  color: white
+}
+
+.lightmode {
+  margin-left: auto;
+}
+
+a {
+  color: rgb(112, 112, 255);
+}
