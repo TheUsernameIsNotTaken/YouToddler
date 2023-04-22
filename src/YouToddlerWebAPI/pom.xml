@@ -4,7 +4,7 @@
     <artifactId>swagger-spring</artifactId>
     <packaging>jar</packaging>
     <name>swagger-spring</name>
-    <version>0.6.4</version>
+    <version>0.7.0</version>
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
