@@ -97,7 +97,7 @@ public class DownloadApiController implements DownloadApi {
         }
     }
 
-    public ResponseEntity<ModelApiResponse> getVideoData(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema( defaultValue="https://youtu.be/dQw4w9WgXcQ")) @Valid @RequestParam(value = "url", required = true, defaultValue="https://youtu.be/dQw4w9WgXcQ") String url,@Parameter(in = ParameterIn.QUERY, description = "ID of the video format" ,schema=@Schema()) @Valid @RequestParam(value = "videoID", required = false) Long videoID,@Parameter(in = ParameterIn.QUERY, description = "ID of the audio format" ,schema=@Schema()) @Valid @RequestParam(value = "audioID", required = false) Long audioID) {
+    public ResponseEntity<ModelApiResponse> getVideoData(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema( defaultValue="")) @Valid @RequestParam(value = "url", required = true, defaultValue="") String url,@Parameter(in = ParameterIn.QUERY, description = "ID of the video format" ,schema=@Schema()) @Valid @RequestParam(value = "videoID", required = false) Long videoID,@Parameter(in = ParameterIn.QUERY, description = "ID of the audio format" ,schema=@Schema()) @Valid @RequestParam(value = "audioID", required = false) Long audioID) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -134,7 +134,7 @@ public class DownloadApiController implements DownloadApi {
                 //  - Check os
                 boolean isWindows = System.getProperty("os.name")
                         .toLowerCase().startsWith("windows");
-                log.info(toddlerCliDir.toString());
+                log.debug(toddlerCliDir.toString());
                 //  - Get video by URL.
                 ProcessBuilder builder = new ProcessBuilder();
                 //String url_str = "https://www.youtube.com/watch?v=ycHVUvvOwzY";
@@ -156,11 +156,11 @@ public class DownloadApiController implements DownloadApi {
                 //  - gobble up the proccess
                 ZipFinder downloadedZip = new ZipFinder();
                 Consumer<String> execConsumer = new ExecConsumer(downloadedZip);
-                log.info("Starting proccess gobbler.");
+                log.debug("Starting proccess gobbler.");
                 MetaApiController.StreamGobbler streamGobbler =
                         new MetaApiController.StreamGobbler(
                                 process.getInputStream(),
-                                ((Consumer<String>) System.out::println).andThen(execConsumer));
+                                (new MetaApiController.loggerConsumer()).andThen(execConsumer));
                 log.info("Starting download execution.");
                 Future<?> future = Executors.newSingleThreadExecutor().submit(streamGobbler);
                 int exitCode = process.waitFor();
@@ -171,7 +171,7 @@ public class DownloadApiController implements DownloadApi {
                 if(downloadedZip.isDefined()){
                     // Generate bytes
                     Path zipVideoPath = Paths.get(toddlerArtifact.toString(), downloadedZip.getZipName());
-                    log.info(zipVideoPath.toString());
+                    //log.info(zipVideoPath.toString());
                     byte[] zipBytes = Files.readAllBytes(zipVideoPath);
                     String basedFile = Base64.getEncoder().encodeToString(zipBytes);
                     // Return downloaded video file.

@@ -62,7 +62,7 @@ public class HistoryApiController implements HistoryApi {
         return new ResponseEntity<List<HistoryLog>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<HistoryLog>> getUrlHistory(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema( defaultValue="https://youtu.be/dQw4w9WgXcQ")) @Valid @RequestParam(value = "url", required = true, defaultValue="https://youtu.be/dQw4w9WgXcQ") String url) {
+    public ResponseEntity<List<HistoryLog>> getUrlHistory(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema( defaultValue="")) @Valid @RequestParam(value = "url", required = true, defaultValue="") String url) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {

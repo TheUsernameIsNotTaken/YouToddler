@@ -1,6 +1,7 @@
 package io.swagger.api;
 
-import io.swagger.model.Metadata;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -32,9 +34,11 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -59,6 +63,7 @@ public class MetaApiController implements MetaApi {
         this.request = request;
     }
 
+
     static class StreamGobbler implements Runnable {
         private InputStream inputStream;
         private Consumer<String> consumer;
@@ -76,7 +81,14 @@ public class MetaApiController implements MetaApi {
         }
     }
 
-    public ResponseEntity<Metadata> getVideoMeta(@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the object to fetch" ,required=true,schema=@Schema( defaultValue="https://youtu.be/dQw4w9WgXcQ")) @Valid @RequestParam(value = "url", required = true, defaultValue="https://youtu.be/dQw4w9WgXcQ") String url) {
+    static class loggerConsumer implements Consumer<String>{
+        @Override
+        public void accept(String s) {
+            log.info(s);
+        }
+    }
+
+    public ResponseEntity<Metadata> getVideoMeta(@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the object to fetch" ,required=true,schema=@Schema( defaultValue="")) @Valid @RequestParam(value = "url", required = true, defaultValue="") String url) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             // Check if URL is valid.
@@ -105,7 +117,7 @@ public class MetaApiController implements MetaApi {
                 //  - Check os
                 boolean isWindows = System.getProperty("os.name")
                         .toLowerCase().startsWith("windows");
-                log.info(toddlerCliDir.toString());
+                log.debug(toddlerCliDir.toString());
                 //  - Get metadata by URL.
                 ProcessBuilder builder = new ProcessBuilder();
                 log.info("Start getting metadata for " + url);
@@ -120,11 +132,11 @@ public class MetaApiController implements MetaApi {
                 //log.info("Builded command: " + builder.command().toString());
                 Process process = builder.start();
                 //  - gobble up the proccess
-                log.info("Starting proccess gobbler.");
+                log.debug("Starting proccess gobbler.");
                 MetaApiController.StreamGobbler streamGobbler =
                         new MetaApiController.StreamGobbler(
                                 process.getInputStream(),
-                                (Consumer<String>) System.out::println);
+                                new loggerConsumer());
                 log.info("Starting metadata reading.");
                 Future<?> future = Executors.newSingleThreadExecutor().submit(streamGobbler);
                 int exitCode = process.waitFor();
@@ -133,12 +145,30 @@ public class MetaApiController implements MetaApi {
                 log.info("Finished getting metadata.");
                 // Generate the metadata object.
                 Path metadataJson = Paths.get(toddlerStaging.toString(), "format_metadata.json");
-                byte[] metadataBytes = Files.readAllBytes(metadataJson);
-                String metadataContent = new String(metadataBytes);
                 // TODO: Fix Metadata class differences
-                Metadata genMeta = objectMapper.readValue(metadataContent, Metadata.class);
+                // Build a Metadata from returned information
+                Object metaO = new JSONParser().parse(new FileReader(metadataJson.toString()));
+                JSONArray metaJ = (JSONArray) metaO;
+                Iterator i = metaJ.iterator();
+                boolean first = true;
+                Metadata genMeta = new Metadata();  // Metadata to save data into
+                while (i.hasNext()) {
+                    JSONObject currMetaJ = (JSONObject) i.next();
+                    if(first){  //Set outside variables once.
+                        genMeta.setUrl(url);
+                        genMeta.setVideoName((String) currMetaJ.get("videoName"));
+                        genMeta.setVideoName((String) currMetaJ.get("thumbnailUrl"));
+                        first = false;
+                    }
+                    // generate the current format data
+                    Format nextFormat = new Format();
+                    nextFormat.setId(Long.parseLong((String) currMetaJ.get("id")));
+                    nextFormat.setName((String) currMetaJ.get("extension"));
+                    Resolution nextRes = new Resolution();  // generate resolution
+                    nextRes.setFilesize(Long.parseLong((String) currMetaJ.get("fileSize")));
+                }
                 // Return the generated metadata.
-                return new ResponseEntity<Metadata>(genMeta, HttpStatus.OK);
+                return new ResponseEntity<Metadata>(new Metadata(), HttpStatus.OK);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<Metadata>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -146,10 +176,10 @@ public class MetaApiController implements MetaApi {
                 log.error("Error while parsing JSON values", e);
                 return new ResponseEntity<Metadata>(HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (ExecutionException e) {
-                log.error("Error while parsing JSON values", e);
+                log.error("Error during metadata getting execution", e);
                 return new ResponseEntity<Metadata>(HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (InterruptedException e) {
-                log.error("Error while parsing JSON values", e);
+                log.error("Interrupted metadata getter execution", e);
                 return new ResponseEntity<Metadata>(HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (TimeoutException e) {
                 log.error("Error while parsing JSON values", e);
