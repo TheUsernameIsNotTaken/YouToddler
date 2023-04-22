@@ -1,0 +1,403 @@
+openapi: 3.0.3
+info:
+  title: YouToddler - OpenAPI 3.0
+  description: >-
+    This is an on-premise download manager for youtube-dlp. It should be based
+    on the OpenAPI 3.0 specification. 
+
+
+    _If you're looking for the sprint board, then click
+    [here](https://manhatten.atlassian.net/jira/software/projects/MAN/boards/1)._
+
+
+    Some useful links:
+
+    - [The YouToddler repository](https://github.com/cant0r/YouToddler)
+
+    - [The backend API definition for
+    YouToddler](https://manhatten.atlassian.net/wiki/spaces/AT/pages/6094879/YouToddler+Backend)
+
+    - [The WebAPi definition for
+    YouToddler](https://manhatten.atlassian.net/wiki/spaces/AT/pages/4063276/REST+API+interfaces)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: WebAPI Support
+    url: https://github.com/TheUsernameIsNotTaken/
+    email: pixelbetyar@mailbox.unideb.hu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.2.1
+externalDocs:
+  description: Confluence Pages for the Project
+  url: >-
+    https://manhatten.atlassian.net/wiki/spaces/AT/pages/1572865/Project+YouToddler+-+An+on-premise+download+manager+for+youtube-dlp+--+RFC
+servers:
+  - url: http://ytoddl.er/api/v1
+tags:
+  - name: meta
+    description: Everything about a specific video
+    externalDocs:
+      description: Find out more about metadata
+      url: >-
+        https://manhatten.atlassian.net/wiki/spaces/AT/pages/4161559/Video+audio+formats
+  - name: download
+    description: Get the file data of specific video or audio
+    externalDocs:
+      description: Find out more about downloading
+      url: >-
+        https://manhatten.atlassian.net/wiki/spaces/AT/pages/4063276/REST+API+interfaces
+  - name: history
+    description: History data about downloads
+paths:
+  /meta:
+    summary: Everything about a specific video
+    description: >-
+      Works with video's metadata. It returns one or multiple videos available
+      quality and other kind of metadata.
+    get:
+      tags:
+        - meta
+      summary: Return video metadata
+      description: This returns a video's url, name, uplader and it's available qualities.
+      operationId: getVideoMeta
+      parameters:
+        - name: url
+          in: query
+          description: ID of the object to fetch
+          required: true
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+        '400':
+          description: Invalid content type.
+        '404':
+          description: Unavailable or nonextistent video
+        '406':
+          description: Missing URL
+        '408':
+          description: Timeout
+        '500':
+          description: Internal Server error while generating response.
+  /download:
+    summary: Get a specific video or audio
+    description: >-
+      Downloads a video at a given url with it's given video or audio format.
+      The formats are passed as IDs. Returns a Video or Audio file. 
+    get:
+      tags:
+        - download
+      summary: Return video's video or audio data
+      description: >-
+        This returns a video's video or audio data given by it's url, video id
+        or audio id. it can be video-only, audio-only or both combined.
+      operationId: getVideoData
+      parameters:
+        - name: videoID
+          in: query
+          description: ID of the video format
+          required: false
+          schema:
+            type: integer
+            format: int64
+            example: 30
+        - name: audioID
+          in: query
+          description: ID of the audio format
+          required: false
+          schema:
+            type: integer
+            format: int64
+            example: 20
+        - name: url
+          in: query
+          description: URL of the video to fetch
+          required: true
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: successful download
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid query value (video id/audio id/url) or content type.
+        '404':
+          description: Unavailable or nonextistent video
+        '406':
+          description: Missing video OR audio id
+        '408':
+          description: Timeout
+        '500':
+          description: Internal Server error while generating response.
+  /history/getAll:
+    summary: Get all previous downloads' logs
+    description: >-
+      Returns all history data regarding previous downloads. Could be made
+      deprecated, and only allow specified history data to be GET later.
+    get:
+      tags:
+        - history
+      summary: Get all previous downloads' logs
+      description: >-
+        Returns all history data regarding previous downloads. Could be made
+        deprecated, and only allow specified history data to be GET later.
+      operationId: getAllHistory
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                xml:
+                  wrapped: true
+                items:
+                  $ref: '#/components/schemas/HistoryLog'
+            application/xml:
+              schema:
+                type: array
+                xml:
+                  wrapped: true
+                items:
+                  $ref: '#/components/schemas/HistoryLog'
+        '403':
+          description: Not authorized
+        '404':
+          description: No history found
+        '500':
+          description: Internal Server error while generating response.
+  /history/findByUrl:
+    summary: Get a specific video's previous download logs.
+    description: >-
+      Returns all history data regarding previous downloads. Can get all or
+      search specific.
+    get:
+      tags:
+        - history
+      summary: Return video's video or audio data
+      description: >-
+        Returns specific history data regarding previous downloads. The input is
+        the specific url, we search by this between the logs. Returns all
+        history logs that contain the specific URL.
+      operationId: getUrlHistory
+      parameters:
+        - name: url
+          in: query
+          description: URL of the video to fetch
+          required: true
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                xml:
+                  wrapped: true
+                items:
+                  $ref: '#/components/schemas/HistoryLog'
+            application/xml:
+              schema:
+                type: array
+                xml:
+                  wrapped: true
+                items:
+                  $ref: '#/components/schemas/HistoryLog'
+        '400':
+          description: Invalid URL
+        '404':
+          description: No history found
+        '500':
+          description: Internal Server error while generating response.
+  /history/{logId}:
+    summary: Get log by id
+    description: >-
+      Returns a specific history log data regarding a previous download. The
+      logId is a log's specific ID number.
+    get:
+      tags:
+        - history
+      summary: Get log by id
+      description: >-
+        Returns a specific history log data regarding a previous download. Takes
+        a log ID in path, and returns that specific log, if found.
+      operationId: getUserByName
+      parameters:
+        - name: logId
+          in: path
+          description: The ID that needs to be fetched.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoryLog'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HistoryLog'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Log not found
+        '500':
+          description: Internal Server error while generating response.
+components:
+  schemas:
+    Video:
+      required:
+        - videoCodec
+      type: object
+      properties:
+        videoCodec:
+          type: string
+          example: avc1
+        fps:
+          type: integer
+          format: int64
+          example: 30
+        vbr:
+          type: integer
+          format: int64
+          example: 446000
+      xml:
+        name: video
+    Audio:
+      required:
+        - audioCodec
+      type: object
+      properties:
+        audioCodec:
+          type: string
+          example: mp4a
+        abr:
+          type: integer
+          format: int64
+          example: 0
+      xml:
+        name: audio
+    HistoryLog:
+      required:
+        - id
+        - url
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        url:
+          type: string
+          example: https://youtu.be/dQw4w9WgXcQ
+        videoId:
+          type: integer
+          format: int64
+          example: 30
+        audioId:
+          type: integer
+          format: int64
+          example: 20
+        date:
+          type: string
+          format: date-time
+          example: '2022-12-10T13:45:00.000Z'
+      xml:
+        name: historyLog
+    Resolution:
+      required:
+        - filesize
+      type: object
+      properties:
+        video:
+          $ref: '#/components/schemas/Video'
+        audio:
+          $ref: '#/components/schemas/Audio'
+        filesize:
+          type: integer
+          format: int64
+          example: 8497
+        tbr:
+          type: integer
+          format: int64
+          example: 446000
+      xml:
+        name: resolution
+    Format:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 22
+        name:
+          type: string
+          example: mp4
+        resolution:
+          $ref: '#/components/schemas/Resolution'
+      xml:
+        name: format
+    Metadata:
+      required:
+        - url
+      type: object
+      properties:
+        url:
+          type: string
+          example: https://youtu.be/dQw4w9WgXcQ
+        videoName:
+          type: string
+          example: Example Name gone wrong! | !!!NOT CLICKBAIT!!!
+        imageUrl:
+          type: string
+          example: https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg
+        formats:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Format'
+      xml:
+        name: metadata
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  securitySchemes:
+    basicSec:
+      type: http
+      scheme: basic
