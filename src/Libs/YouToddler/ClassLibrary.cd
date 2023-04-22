@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="The following components are record types and the VS Class Diagram Editor cannot parse them:&#xD;&#xA;* YouToddlerMediaContent(int id, string videoTitle, string extension,&#xD;&#xA;		            Uri thumbnailUrl, int fileSize, int tbr,&#xD;&#xA;		           string moreInfo,&#xD;&#xA;		           YouToddlerAudioFormat audioFormat,&#xD;&#xA;                                         YouToddlerVideoFormat videoFormat)&#xD;&#xA;* YouToddlerAudioFormat(string codec, int abr)&#xD;&#xA;* YouToddlerVideoFormat(string codec, int vbr, int fps)">
+    <Position X="3.911" Y="8.052" Height="2.073" Width="4.367" />
+  </Comment>
+  <Class Name="YouToddler.Artifactory.YouToddlerLocalArtifactory">
+    <Position X="1.5" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAACAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Artifactory\YouToddlerLocalArtifactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YouToddler.Configuration.YouToddlerConfiguration">
+    <Position X="4.25" Y="1.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Configuration\YouToddlerConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YouToddler.Downloader.YouToddlerDownloader">
+    <Position X="4.25" Y="4.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgBAAAQAAAAACBAAAAAEAAAgAACBQAAAAA=</HashCode>
+      <FileName>Downloader\YouToddlerDownloader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YouToddler.Parser.YouToddlerParser">
+    <Position X="8" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Parser\YouToddlerParser.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YouToddler.Runner.YouToddlerRunner">
+    <Position X="10.25" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAgAAAAAQAAAIAgAAAAAAA=</HashCode>
+      <FileName>Runner\YouToddlerRunner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YouToddler.History.YouToddlerHistorian">
+    <Position X="10.25" Y="2.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>History\YouToddlerHistorian.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="YouToddler.Artifactory.IYouToddlerArtifactory">
+    <Position X="1.5" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Artifactory\IYouToddlerArtifactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="YouToddler.Parser.IYouToddlerParser">
+    <Position X="8" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Parser\IYouToddlerParser.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
