@@ -143,7 +143,6 @@ public class MetaApiController implements MetaApi {
                 log.info("Finished getting metadata.");
                 // Generate the metadata object.
                 Path metadataJson = Paths.get(toddlerStaging.toString(), "format_metadata.json");
-                // TODO: Fix Metadata class differences
                 // Build a Metadata from returned information
                 FileReader MetaFr = new FileReader(metadataJson.toString());
                 Object metaO = new JSONParser().parse(MetaFr);
