@@ -2,31 +2,49 @@ package io.swagger.api;
 
 import io.swagger.model.ModelApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-06T21:09:37.363059348Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-22T11:09:03.174853304Z[GMT]")
 @RestController
 public class DownloadApiController implements DownloadApi {
 
@@ -97,7 +115,7 @@ public class DownloadApiController implements DownloadApi {
         }
     }
 
-    public ResponseEntity<ModelApiResponse> getVideoData(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema( defaultValue="")) @Valid @RequestParam(value = "url", required = true, defaultValue="") String url,@Parameter(in = ParameterIn.QUERY, description = "ID of the video format" ,schema=@Schema()) @Valid @RequestParam(value = "videoID", required = false) Long videoID,@Parameter(in = ParameterIn.QUERY, description = "ID of the audio format" ,schema=@Schema()) @Valid @RequestParam(value = "audioID", required = false) Long audioID) {
+    public ResponseEntity<ModelApiResponse> getVideoData(@NotNull @Parameter(in = ParameterIn.QUERY, description = "URL of the video to fetch" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "url", required = true) String url,@Parameter(in = ParameterIn.QUERY, description = "ID of the video format" ,schema=@Schema()) @Valid @RequestParam(value = "videoID", required = false) Long videoID,@Parameter(in = ParameterIn.QUERY, description = "ID of the audio format" ,schema=@Schema()) @Valid @RequestParam(value = "audioID", required = false) Long audioID) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -122,7 +140,8 @@ public class DownloadApiController implements DownloadApi {
                 Path toddlerCliDir = Paths.get(runParent.toString(),MetaApiController.CLI_SUBPATH);
                 //  - Read in staging directories from file
                 Path settingJson = Paths.get(toddlerCliDir.toString(), "appsettings.json");
-                Object o = new JSONParser().parse(new FileReader(settingJson.toString()));
+                FileReader fr = new FileReader(settingJson.toString());
+                Object o = new JSONParser().parse(fr);
                 JSONObject j = (JSONObject) o;
                 JSONObject YouToddlerConfiguration = (JSONObject) j.get("YouToddlerConfiguration");
                 String StagingDirectory = (String) YouToddlerConfiguration.get("StagingDirectory");
@@ -130,6 +149,7 @@ public class DownloadApiController implements DownloadApi {
                 //  - Generate staging and artifact paths.
                 Path toddlerStaging = Paths.get(toddlerCliDir.toString(), StagingDirectory);
                 Path toddlerArtifact = Paths.get(toddlerCliDir.toString(), ArtifactUploadDestination);
+                fr.close();
                 // Generate command
                 //  - Check os
                 boolean isWindows = System.getProperty("os.name")

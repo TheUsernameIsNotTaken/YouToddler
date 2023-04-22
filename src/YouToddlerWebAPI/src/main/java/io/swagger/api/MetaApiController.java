@@ -1,6 +1,5 @@
 package io.swagger.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,8 +33,6 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.net.URI;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
@@ -45,11 +42,11 @@ import java.util.concurrent.*;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-06T21:09:37.363059348Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-22T11:09:03.174853304Z[GMT]")
 @RestController
 public class MetaApiController implements MetaApi {
-    public final static String CLI_SUBPATH = "YouToddlerCLI\\bin\\Debug\\net7.0";
+
+    public final static String CLI_SUBPATH = "YouToddlerCLI/bin/Release/net7.0";
 
     private static final Logger log = LoggerFactory.getLogger(MetaApiController.class);
 
@@ -62,7 +59,6 @@ public class MetaApiController implements MetaApi {
         this.objectMapper = objectMapper;
         this.request = request;
     }
-
 
     static class StreamGobbler implements Runnable {
         private InputStream inputStream;
@@ -88,7 +84,7 @@ public class MetaApiController implements MetaApi {
         }
     }
 
-    public ResponseEntity<Metadata> getVideoMeta(@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the object to fetch" ,required=true,schema=@Schema( defaultValue="")) @Valid @RequestParam(value = "url", required = true, defaultValue="") String url) {
+    public ResponseEntity<Metadata> getVideoMeta(@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the object to fetch" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "url", required = true) String url) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             // Check if URL is valid.
@@ -107,12 +103,14 @@ public class MetaApiController implements MetaApi {
                 Path toddlerCliDir = Paths.get(runParent.toString(),CLI_SUBPATH);
                 //  - Read in staging directories from file
                 Path settingJson = Paths.get(toddlerCliDir.toString(), "appsettings.json");
-                Object o = new JSONParser().parse(new FileReader(settingJson.toString()));
+                FileReader fr = new FileReader(settingJson.toString());
+                Object o = new JSONParser().parse(fr);
                 JSONObject j = (JSONObject) o;
                 JSONObject YouToddlerConfiguration = (JSONObject) j.get("YouToddlerConfiguration");
                 String StagingDirectory = (String) YouToddlerConfiguration.get("StagingDirectory");
                 //  - Generate staging and artifact paths.
                 Path toddlerStaging = Paths.get(toddlerCliDir.toString(), StagingDirectory);
+                fr.close();
                 // Get metadata from YouToddlerCLI - Generate command
                 //  - Check os
                 boolean isWindows = System.getProperty("os.name")
@@ -147,28 +145,51 @@ public class MetaApiController implements MetaApi {
                 Path metadataJson = Paths.get(toddlerStaging.toString(), "format_metadata.json");
                 // TODO: Fix Metadata class differences
                 // Build a Metadata from returned information
-                Object metaO = new JSONParser().parse(new FileReader(metadataJson.toString()));
+                FileReader MetaFr = new FileReader(metadataJson.toString());
+                Object metaO = new JSONParser().parse(MetaFr);
                 JSONArray metaJ = (JSONArray) metaO;
-                Iterator i = metaJ.iterator();
+                Iterator metaI = metaJ.iterator();
                 boolean first = true;
                 Metadata genMeta = new Metadata();  // Metadata to save data into
-                while (i.hasNext()) {
-                    JSONObject currMetaJ = (JSONObject) i.next();
+                while (metaI.hasNext()) {
+                    JSONObject currMetaJ = (JSONObject) metaI.next();
                     if(first){  //Set outside variables once.
                         genMeta.setUrl(url);
-                        genMeta.setVideoName((String) currMetaJ.get("videoName"));
-                        genMeta.setVideoName((String) currMetaJ.get("thumbnailUrl"));
+                        //genMeta.setVideoName((String) currMetaJ.get("videoTitle"));
+                        genMeta.setImageUrl((String) currMetaJ.get("thumbnailUrl"));
                         first = false;
                     }
                     // generate the current format data
                     Format nextFormat = new Format();
-                    nextFormat.setId(Long.parseLong((String) currMetaJ.get("id")));
+                    nextFormat.setId((Long) currMetaJ.get("id"));
                     nextFormat.setName((String) currMetaJ.get("extension"));
-                    Resolution nextRes = new Resolution();  // generate resolution
-                    nextRes.setFilesize(Long.parseLong((String) currMetaJ.get("fileSize")));
+                        // generate resolution
+                        Resolution nextRes = new Resolution();
+                        nextRes.setFilesize((Long) currMetaJ.get("fileSize"));
+                        nextRes.setTbr((Long) currMetaJ.get("tbr"));
+                            // generate audio
+                            Audio nextAudio = new Audio();
+                            JSONObject audioO = (JSONObject) currMetaJ.get("audioFormat");
+                            nextAudio.setAudioCodec((String) audioO.get("codec"));
+                            nextAudio.setAbr((Long) audioO.get("abr"));
+                            // generate video
+                            Video nextVideo = new Video();
+                            JSONObject videoO = (JSONObject) currMetaJ.get("videoFormat");
+                            nextVideo.setVideoCodec((String) videoO.get("codec"));
+                            nextVideo.setVbr((Long) videoO.get("vbr"));
+                            nextVideo.setFps((Long) videoO.get("fps"));
+                        // add generated objects to resolution
+                        nextRes.setAudio(nextAudio);
+                        nextRes.setVideo(nextVideo);
+                    // add generated resolution to format
+                    nextFormat.setResolution(nextRes);
+                    //add format into Metadata list
+                    genMeta.addFormatsItem(nextFormat);
                 }
+                MetaFr.close();
+                log.info("Generated medtadata");
                 // Return the generated metadata.
-                return new ResponseEntity<Metadata>(new Metadata(), HttpStatus.OK);
+                return new ResponseEntity<Metadata>(genMeta, HttpStatus.OK);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<Metadata>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * Resolution
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-06T21:09:37.363059348Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-22T11:09:03.174853304Z[GMT]")
 
 
 public class Resolution   {
@@ -25,7 +25,7 @@ public class Resolution   {
   private Audio audio = null;
 
   @JsonProperty("filesize")
-  private String filesize = null;
+  private Long filesize = null;
 
   @JsonProperty("tbr")
   private Long tbr = null;
@@ -70,7 +70,7 @@ public class Resolution   {
     this.audio = audio;
   }
 
-  public Resolution filesize(String filesize) {
+  public Resolution filesize(Long filesize) {
     this.filesize = filesize;
     return this;
   }
@@ -79,14 +79,14 @@ public class Resolution   {
    * Get filesize
    * @return filesize
    **/
-  @Schema(example = "1,39MiB", required = true, description = "")
+  @Schema(example = "8497", required = true, description = "")
       @NotNull
 
-    public String getFilesize() {
+    public Long getFilesize() {
     return filesize;
   }
 
-  public void setFilesize(String filesize) {
+  public void setFilesize(Long filesize) {
     this.filesize = filesize;
   }
 

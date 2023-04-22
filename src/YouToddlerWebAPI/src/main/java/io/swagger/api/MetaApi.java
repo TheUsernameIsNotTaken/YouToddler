@@ -32,7 +32,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-06T21:09:37.363059348Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-22T11:09:03.174853304Z[GMT]")
 @Validated
 public interface MetaApi {
 
@@ -45,14 +45,14 @@ public interface MetaApi {
         @ApiResponse(responseCode = "404", description = "Unavailable or nonextistent video"),
         
         @ApiResponse(responseCode = "406", description = "Missing URL"),
-
+        
         @ApiResponse(responseCode = "408", description = "Timeout"),
-
+        
         @ApiResponse(responseCode = "500", description = "Internal Server error while generating response.") })
     @RequestMapping(value = "/meta",
         produces = { "application/json", "application/xml" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Metadata> getVideoMeta(@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the object to fetch" ,required=true,schema=@Schema( defaultValue="https://youtu.be/dQw4w9WgXcQ")) @Valid @RequestParam(value = "url", required = true, defaultValue="https://youtu.be/dQw4w9WgXcQ") String url);
+    ResponseEntity<Metadata> getVideoMeta(@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the object to fetch" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "url", required = true) String url);
 
 }
 
