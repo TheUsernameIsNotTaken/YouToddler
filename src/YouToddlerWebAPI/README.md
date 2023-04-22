@@ -11,6 +11,7 @@ This is an example of building a swagger-enabled server in Java using the Spring
 
 The underlying library integrating swagger to SpringBoot is [springdoc-openapi](https://github.com/springdoc/springdoc-openapi)
 
+
 Start your server as a simple java application.
 
 You can view the api documentation in swagger-ui by pointing to  
@@ -28,3 +29,4 @@ TODO: Insert future app link here.
 ## Testing
 
 Check the Postman tests in the [public YouToddler collection](www.postman.com/pixelbetyar/workspace/youtoddler-webapi/), in the exported [collection json](https://github.com/cant0r/YouToddler/tree/master/docs/YouToddler.postman_collection.json), or on the [Confluence page](https://manhatten.atlassian.net/wiki/spaces/AT/pages/7110657/OpenAPI+documentation#Testing).
+
