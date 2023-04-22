@@ -155,7 +155,7 @@ public class MetaApiController implements MetaApi {
                     JSONObject currMetaJ = (JSONObject) metaI.next();
                     if(first){  //Set outside variables once.
                         genMeta.setUrl(url);
-                        //genMeta.setVideoName((String) currMetaJ.get("videoTitle"));
+                        genMeta.setVideoName((String) currMetaJ.get("videoTitle"));
                         genMeta.setImageUrl((String) currMetaJ.get("thumbnailUrl"));
                         first = false;
                     }
