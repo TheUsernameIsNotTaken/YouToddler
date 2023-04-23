@@ -22,7 +22,7 @@ Get the full documentation from http://localhost:9090/api/v1/api-docs or from th
 Change default port value in application.properties
 
 ## YouToddler
-A Youtube video donwloader OpenAPI project.
+A Youtube video downloader OpenAPI project.
 
 You can find the defined OpenAPI [here](https://github.com/cant0r/YouToddler/blob/master/src/YouToddlerWebAPI/openapi.yaml)
 
