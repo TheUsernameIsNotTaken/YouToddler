@@ -1,11 +1,10 @@
 package io.youtoddler.api;
 
-import io.swagger.model.*;
+import io.youtoddler.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.youtoddler.model.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
