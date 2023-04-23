@@ -1,4 +1,4 @@
-package io.swagger.configuration;
+package io.youtoddler.configuration;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

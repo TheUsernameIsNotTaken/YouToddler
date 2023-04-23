@@ -1,7 +1,7 @@
-package io.swagger;
+package io.youtoddler;
 
-import io.swagger.configuration.LocalDateConverter;
-import io.swagger.configuration.LocalDateTimeConverter;
+import io.youtoddler.configuration.LocalDateConverter;
+import io.youtoddler.configuration.LocalDateTimeConverter;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
