@@ -32,3 +32,14 @@ TODO: Insert future app link here.
 
 Check the Postman tests in the [public YouToddler collection](https://www.postman.com/pixelbetyar/workspace/youtoddler-webapi/overview), in the exported [collection json](https://github.com/cant0r/YouToddler/blob/master/src/YouToddlerWebAPI/YouToddler.postman_collection.json), or on the [Confluence page](https://manhatten.atlassian.net/wiki/spaces/AT/pages/7110657/OpenAPI+documentation#Testing).
 
+## Build and run
+
+To build use either:
+```.\mvnw clean package spring-boot:repackage```
+or
+```mvn clean package spring-boot:repackage```
+
+Then you can run the spring-boot YouToddler Web-API application by using the following command:
+```java -jar .\target\youtoddler-spring-<API-VERSION>.jar```
+
+For all information, and for a step-by-step guide, go to the [corresponding Confulence page](https://manhatten.atlassian.net/wiki/spaces/AT/pages/12877881/Building+the+spring-boot+app).
