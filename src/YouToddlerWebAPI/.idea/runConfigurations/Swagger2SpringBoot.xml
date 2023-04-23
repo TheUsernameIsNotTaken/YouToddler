@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Swagger2SpringBoot" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <module name="swagger-spring" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.swagger.Swagger2SpringBoot" />
+    <module name="youtoddler-spring" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.youtoddler.Swagger2SpringBoot" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
