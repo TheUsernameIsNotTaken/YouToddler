@@ -30,7 +30,7 @@ TODO: Insert future app link here.
 
 ## Testing
 
-Check the Postman tests in the [public YouToddler collection](https://www.postman.com/pixelbetyar/workspace/youtoddler-webapi/overview), in the exported [collection json](https://github.com/cant0r/YouToddler/blob/master/src/YouToddlerWebAPI/YouToddler.postman_collection.json), or on the [Confluence page](https://manhatten.atlassian.net/wiki/spaces/AT/pages/7110657/OpenAPI+documentation#Testing).
+Check the Postman tests in the [public YouToddler collection](https://www.postman.com/deep-breath-9000/workspace/youtoddler-webapi/overview), in the exported [collection json](https://github.com/cant0r/YouToddler/blob/master/src/YouToddlerWebAPI/YouToddler.postman_collection.json), or on the [Confluence page](https://manhatten.atlassian.net/wiki/spaces/AT/pages/7110657/OpenAPI+documentation#Testing).
 
 ## Build and run
 
