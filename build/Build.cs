@@ -2,7 +2,9 @@ using Serilog;
 using Nuke.Common;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Docker;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 using Nuke.Common.CI.GitHubActions;
 using System;
@@ -14,13 +16,13 @@ using System.IO;
     GitHubActionsImage.WindowsLatest,
     InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI), nameof(PublishAll)},
     OnCronSchedule = "* 0 * * *",
+    ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
     AutoGenerate = true
 )]
 [GitHubActions(
     "pr-pipeline",
     GitHubActionsImage.UbuntuLatest,
     GitHubActionsImage.WindowsLatest,
-    GitHubActionsImage.MacOsLatest,
     InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
     OnPullRequestBranches = new[] { "master"},
     AutoGenerate = true
@@ -37,6 +39,11 @@ partial class Build : NukeBuild
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+
+    [Parameter] [Secret]
+    readonly string DOCKER_USERNAME;
+    [Parameter] [Secret]
+    readonly string DOCKER_PASSWORD;
 
     [Solution]
     readonly Solution Solution;
@@ -106,8 +113,25 @@ partial class Build : NukeBuild
         .DependsOn(ReleaseCli, ReleaseWebApi, ReleaseFrontend)
         .Executes(() => 
         {
-            Log.Information("Done publishing YouToddler");
-            Log.Information("YouToddler ready for `docker compose`");
-            Log.Information("Execute `docker compose up` in the project root directory to run the application locally.");
+            DockerLogin(_ => _
+                .SetUsername(DOCKER_USERNAME)
+                .SetPassword(DOCKER_PASSWORD));
+
+            DockerBuild(_ => _
+                .SetPath(RootDirectory / "src/")
+                .SetTag("youtoddler/backend:latest")
+                .SetFile(Path.Join(YouToddlerWebApiPath, "Dockerfile"))
+                );
+
+            DockerBuild(_ => _
+                .SetPath(YouToddlerFrontendPath)
+                .SetTag("youtoddler/frontend:latest")
+                .SetFile(Path.Join(YouToddlerFrontendPath, "Dockerfile")));
+            
+            DockerPush(_ => _
+                .SetName("youtoddler/backend:latest"));
+                
+            DockerPush(_ => _
+                .SetName("youtoddler/frontend:latest"));
         });
 }
