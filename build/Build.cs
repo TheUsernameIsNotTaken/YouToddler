@@ -3,13 +3,16 @@ using Nuke.Common;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 using Nuke.Common.CI.GitHubActions;
+using System;
+using System.IO;
 
 [GitHubActions(
     "build-all-and-validate-nightly",
     GitHubActionsImage.Ubuntu2204,
     GitHubActionsImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
+    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI), nameof(PublishAll)},
     OnCronSchedule = "* 0 * * *",
     AutoGenerate = true
 )]
@@ -76,4 +79,35 @@ partial class Build : NukeBuild
             .SetProjectFile(YouToddlerCliCsprojPath));
         });
 
+    Target ReleaseCli => _ => _
+        .Executes(() => 
+        {
+            DotNetPublish(_ => _
+                .SetConfiguration(Configuration)
+                .SetRuntime(OperatingSystem.IsWindows() ? "win-x64" : "linux-x64")
+                .SetSelfContained(true)
+                .SetOutput(Path.Combine(Path.GetDirectoryName(YouToddlerCliCsprojPath), "publish/"))
+                .SetProject(YouToddlerCliCsprojPath));
+        });
+
+    Target ReleaseWebApi => _ => _
+        .Executes(() => 
+        {
+            PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
+        });
+
+    Target ReleaseFrontend => _ => _
+        .Executes(() => 
+        {
+            Log.Warning("Actual deployment will be handled by Docker");
+        });
+
+    Target PublishAll => _ => _
+        .DependsOn(ReleaseCli, ReleaseWebApi, ReleaseFrontend)
+        .Executes(() => 
+        {
+            Log.Information("Done publishing YouToddler");
+            Log.Information("YouToddler ready for `docker compose`");
+            Log.Information("Execute `docker compose up` in the project root directory to run the application locally.");
+        });
 }

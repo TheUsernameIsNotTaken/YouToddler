@@ -19,4 +19,6 @@ partial class Build
     }
 
     public static readonly string YouToddlerCliCsprojPath = RootDirectory / "src/YouToddlerCLI/YouToddlerCLI.csproj";
+    public static readonly string YouToddlerWebApiPath = RootDirectory / "src/YouToddlerWebAPI/";
+    public static readonly string YouToddlerFrontendPath = RootDirectory / "src/YouToddlerFrontend/";
 }

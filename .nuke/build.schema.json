@@ -76,6 +76,10 @@
               "CompileBackend",
               "CompileFrontend",
               "CompileWebApi",
+              "PublishAll",
+              "ReleaseCli",
+              "ReleaseFrontend",
+              "ReleaseWebApi",
               "ValidateCLI"
             ]
           }
@@ -94,6 +98,10 @@
               "CompileBackend",
               "CompileFrontend",
               "CompileWebApi",
+              "PublishAll",
+              "ReleaseCli",
+              "ReleaseFrontend",
+              "ReleaseWebApi",
               "ValidateCLI"
             ]
           }
