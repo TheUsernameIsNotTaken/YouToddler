@@ -13,27 +13,27 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "f87ae4f3-b2ba-4e82-8d70-441b70214174",
 						"exec": [
 							"// Succesfull response test\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"// OpenAPI verson test\r",
 							"pm.test(\"OpenAPI version is correct.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    test = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    test(\"openapi\", \"string\", \"3.0.3\");\r",
 							"});\r",
 							"\r",
 							"// Title test\r",
 							"pm.test(\"Info and title exists and contains YouToddler.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    test = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    test(\"info.title\", \"string\", \"YouToddler\");\r",
 							"});"
 						],
-						"type": "text/javascript",
-						"id": "f87ae4f3-b2ba-4e82-8d70-441b70214174"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -70,35 +70,35 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "4a8b58ec-7e4e-4609-b69c-ebf3431c92cd",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"URL is correct.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
-							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_2\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest(\"url\", \"string\", pm.environment.get(\"test_vid_2\"));\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Video title exists.\", function(){\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ExtTest(\"videoName\", \"string\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Thumbnail URL exists.\", function(){\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ExtTest(\"imageUrl\", \"string\");\r",
 							"});\r",
 							""
 						],
-						"type": "text/javascript",
-						"id": "4a8b58ec-7e4e-4609-b69c-ebf3431c92cd"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -145,22 +145,22 @@
 						"id": "60845989-fdb3-48a3-adf7-a5e938b90965",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"URL is correct.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
-							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_1\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest(\"url\", \"string\", pm.environment.get(\"test_vid_1\"));\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Video title exists.\", function(){\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ExtTest(\"videoName\", \"string\");\r",
 							"});\r",
 							""
@@ -209,23 +209,23 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "1e7601f9-f66f-479b-9341-92073c1bc331",
 						"exec": [
 							"pm.test(\"Response is an error.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicErrorTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicErrorTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response code was correct.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(400);\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"status\", \"number\", 400);\r",
 							"    ConTest(\"error\", \"string\", \"Bad Request\");\r",
 							"});\r",
 							""
 						],
-						"type": "text/javascript",
-						"id": "1e7601f9-f66f-479b-9341-92073c1bc331"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -263,22 +263,22 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "cb4cb312-0392-43b1-bad4-debef3d99d6a",
 						"exec": [
 							"pm.test(\"Response is an error.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicErrorTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicErrorTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response code was correct.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeNoBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeNoBodyTest\"));\r",
 							"    test(406);\r",
 							"});\r",
 							"\r",
 							"\r",
 							""
 						],
-						"type": "text/javascript",
-						"id": "cb4cb312-0392-43b1-bad4-debef3d99d6a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -322,32 +322,32 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "4f96c12b-05ee-41cd-b69d-026c2dae8391",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is not an error.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"code\", \"number\", 200);\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is base64 encoded.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"    ExtTest(\"message\", \"string\");\r",
 							"});"
 						],
-						"type": "text/javascript",
-						"id": "4f96c12b-05ee-41cd-b69d-026c2dae8391"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -398,32 +398,32 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "3e14f577-bc76-4fd0-a203-405a6260834b",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is not an error.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"code\", \"number\", 200);\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is base64 encoded.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"    ExtTest(\"message\", \"string\");\r",
 							"});"
 						],
-						"type": "text/javascript",
-						"id": "3e14f577-bc76-4fd0-a203-405a6260834b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -473,6 +473,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
+				"id": "8b8ac0ce-d199-493d-a08d-5870b13f2dca",
 				"type": "text/javascript",
 				"exec": [
 					"// Functions used for YouToddler Unit tests. Created by TheUsernameIsNotTaken (https://github.com/TheUsernameIsNotTaken)",
@@ -481,7 +482,7 @@
 					" * ------- JSON FIELDS ------- *",
 					" * *************************** */",
 					"",
-					"",
+					"// Not used in this version.",
 					"",
 					"/* *************************** *",
 					" * ----- TEST FUNCTIONS ------ *",
@@ -494,13 +495,13 @@
 					"    pm.response.to.be.withBody;",
 					"    pm.response.to.be.json;",
 					"};",
-					"pm.collectionVariables.set(\"StatusCodeWithBodyTest\", StatusCodeWithBodyTest.toString());",
+					"pm.environment.set(\"StatusCodeWithBodyTest\", StatusCodeWithBodyTest.toString());",
 					"// basic status code without body check",
 					"let StatusCodeNoBodyTest = (statuscode) => {",
 					"    pm.response.to.have.status(statuscode);",
 					"    pm.response.to.not.be.withBody;",
 					"};",
-					"pm.collectionVariables.set(\"StatusCodeNoBodyTest\", StatusCodeNoBodyTest.toString());",
+					"pm.environment.set(\"StatusCodeNoBodyTest\", StatusCodeNoBodyTest.toString());",
 					"",
 					"/* *************************** */",
 					"",
@@ -509,12 +510,12 @@
 					"let BasicErrorTest = () => {",
 					"    pm.response.to.be.error;",
 					"};",
-					"pm.collectionVariables.set(\"BasicErrorTest\", BasicErrorTest.toString());",
+					"pm.environment.set(\"BasicErrorTest\", BasicErrorTest.toString());",
 					"// besic ok check",
 					"let BasicOkTest = () => {",
 					"    pm.response.to.be.not.error;",
 					"};",
-					"pm.collectionVariables.set(\"BasicOkTest\", BasicOkTest.toString());",
+					"pm.environment.set(\"BasicOkTest\", BasicOkTest.toString());",
 					"",
 					"/* *************************** */",
 					"",
@@ -528,7 +529,7 @@
 					"        pm.expect(JsonVar()).to.not.be.empty;",
 					"    pm.expect(JsonVar()).to.not.be.null;",
 					"};",
-					"pm.collectionVariables.set(\"JsonBodyExistTest\", JsonBodyExistTest.toString());",
+					"pm.environment.set(\"JsonBodyExistTest\", JsonBodyExistTest.toString());",
 					"// Json body part content check",
 					"let JsonBodyContainTest = (varName, varType, value) => {",
 					"    pm.response.to.have.jsonBody(varName);",
@@ -541,106 +542,105 @@
 					"        pm.expect(JsonVar()).to.contain(value);",
 					"    }",
 					"};",
-					"pm.collectionVariables.set(\"JsonBodyContainTest\", JsonBodyContainTest.toString());"
-				],
-				"id": "0f2eda60-6f84-41ef-970c-aaef4a1fd30e"
+					"pm.environment.set(\"JsonBodyContainTest\", JsonBodyContainTest.toString());"
+				]
 			}
 		},
 		{
 			"listen": "test",
 			"script": {
+				"id": "e6e1eb26-fe56-42b5-aed5-9abe73e5733e",
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "b767080b-46ad-438a-bc5a-de6037692e0e"
+				]
 			}
 		}
 	],
 	"variable": [
 		{
-			"id": "f44d380d-d680-499f-8f75-17239acf5684",
+			"id": "5c0ea8d0-1ba4-4263-af73-e39eaa3a61f7",
 			"key": "host_url",
 			"value": "http://localhost:9090",
 			"type": "string"
 		},
 		{
-			"id": "9e6cccf8-2972-4eeb-8a72-94f059d02f9a",
+			"id": "7ea0240e-7cb0-4b89-928b-209d6ca62cd1",
 			"key": "api_url",
 			"value": "api/v1",
 			"type": "string"
 		},
 		{
-			"id": "a13ab212-e387-4e20-a243-8ac7f41a1a78",
+			"id": "e3439290-404b-4fda-bec5-7dae0f653fef",
 			"key": "test_vid_1",
 			"value": "https://youtu.be/v1BDVbbxqp0",
 			"type": "string"
 		},
 		{
-			"id": "9763e889-cd7a-4755-843d-939d25b86fca",
+			"id": "f1b9c05d-06be-463b-b539-9743c62bb892",
 			"key": "test_id_1_av",
 			"value": "22",
 			"type": "string"
 		},
 		{
-			"id": "2e00d118-075a-47e8-b737-6728f1346d4f",
+			"id": "fcaeb869-a02f-4cd8-85e3-a58671af029d",
 			"key": "test_vid_2",
 			"value": "https://youtu.be/ue_7GwsB8TE",
 			"type": "string"
 		},
 		{
-			"id": "3e60cbad-3a26-4b6f-8639-b41a6041c1f1",
+			"id": "c3de586c-2323-49a1-89cc-f4552531c82a",
 			"key": "test_id_2_av",
 			"value": "17",
 			"type": "string"
 		},
 		{
-			"id": "2ac4c44f-b5b2-425b-a11e-a4f434ad3b58",
+			"id": "c8de39c6-737d-4d42-9aaf-de42cfb0c2bd",
 			"key": "OkTest",
 			"value": ""
 		},
 		{
-			"id": "c6033a70-4048-4749-92a0-8b8a02aa2fc3",
+			"id": "52b5bfbc-331d-469f-9d7f-2cfb139bc278",
 			"key": "NoErrorTest",
 			"value": ""
 		},
 		{
-			"id": "ea6ed5c0-f7cb-4296-9878-1c7eb2c09ba0",
+			"id": "07c78da4-791d-4dc1-89e6-c2704d3f9006",
 			"key": "RequestEncodedTest",
 			"value": ""
 		},
 		{
-			"id": "fb035af2-d76f-4f5e-98e5-c93f2106643d",
+			"id": "3fa93b91-8bf1-4c0f-aa32-e3880a236221",
 			"key": "MessageCorrectTest",
 			"value": ""
 		},
 		{
-			"id": "0286c218-6e1f-4baa-a24e-149daa409054",
+			"id": "c83340cf-ca13-47d9-9396-df0c1408c47d",
 			"key": "StatusCodeWithBodyTest",
 			"value": ""
 		},
 		{
-			"id": "9154c6ab-c00a-4a40-9dcf-ef811575b247",
+			"id": "6315f938-485d-406e-a5c5-c1a7cb10e70d",
 			"key": "StatusCodeNoBodyTest",
 			"value": ""
 		},
 		{
-			"id": "324b8cea-5c8d-4f6c-b4b5-c7c8074eec72",
+			"id": "8f1e4188-697f-4172-8867-593f2a9154a5",
 			"key": "BasicErrorTest",
 			"value": ""
 		},
 		{
-			"id": "68bde1b6-00bb-42ca-a1fe-8cb3d5663e90",
+			"id": "55d758db-6fd0-418d-a2e0-4edbfe863eb9",
 			"key": "JsonBodyExistTest",
 			"value": ""
 		},
 		{
-			"id": "c92e83ad-1b35-4a15-bae9-cee75bfc779c",
+			"id": "ab4ab2f8-f445-4282-a236-0ce7b240647d",
 			"key": "JsonBodyContainTest",
 			"value": ""
 		},
 		{
-			"id": "d8c43448-96a2-4410-a87b-11b46d803be5",
+			"id": "57695eb6-e6e5-4c85-8898-b04e7e4d8a42",
 			"key": "BasicOkTest",
 			"value": ""
 		}
