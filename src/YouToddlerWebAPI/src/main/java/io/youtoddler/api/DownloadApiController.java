@@ -121,8 +121,7 @@ public class DownloadApiController implements DownloadApi {
                 }
                 */
                 // Needed main paths of operation
-                Path runParent = Paths.get("").toRealPath().getParent();
-                Path toddlerCliDir = Paths.get(runParent.toString(),MetaApiController.CLI_SUBPATH);
+                Path toddlerCliDir = Paths.get("").toRealPath();
                 //  - Read in staging directories from file
                 Path settingJson = Paths.get(toddlerCliDir.toString(), "appsettings.json");
                 FileReader fr = new FileReader(settingJson.toString());
@@ -139,7 +138,6 @@ public class DownloadApiController implements DownloadApi {
                 //  - Check os
                 boolean isWindows = System.getProperty("os.name")
                         .toLowerCase().startsWith("windows");
-                log.debug(toddlerCliDir.toString());
                 //  - Get video by URL.
                 ProcessBuilder builder = new ProcessBuilder();
                 //String url_str = "https://www.youtube.com/watch?v=ycHVUvvOwzY";
