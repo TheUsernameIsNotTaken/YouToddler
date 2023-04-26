@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "7ce3db2a-53e4-4902-ad23-2a2cc967e243",
-		"name": "YouToddler",
+		"_postman_id": "f2c5b23c-1f57-4f0a-9402-520646560ce2",
+		"name": "YouToddler Test",
 		"description": "## Introduction\n\nYouToddler is an open-source YouTube downloader API passion project by 4 collage students from UniDeb.\n\nThe API is defined with [Swagger](https://editor.swagger.io), and it's definition are always available, by calling {{host_url}}/{{api_url}}/api-docs (the Get Swagger Documentation call) in your browser any time.\n\n## About the API\n\nIt is a REST API, so keeping the standard principles are always desired. Meaning It MUST HAVE Uniform interface, MUST HAVE Client-server decoupling, MUST BE Stateless, SHOULD HAVE Cacheability, MUST BE prepared for Layered system architecture, and COULD support code on demand. More infromation [here](https://www.ibm.com/topics/rest-apis).\n\n## Data models\n\n### Metadata Object\n\n``` json\n{\n  \"url\": \"https://youtu.be/dQw4w9WgXcQ\",\n  \"videoName\": \"Example Name gone wrong! | !!!NOT CLICKBAIT!!!\",\n  \"imageUrl\": \"https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg\",\n  \"formats\": [\n    { ... format_1 ... },\n    { ... format_2 ... } ...\n  ]\n}\n\n```\n\n### Format object\n\n[Link to original definition.](https://manhatten.atlassian.net/wiki/spaces/AT/pages/4161559/Video+audio+formats#JSON)\n\n``` json\n{\n  \"id\": 22,\n  \"name\": \"mp4\",\n  \"resolution\": { ... resolution data ... }\n}\n\n```\n\n### Resolution Object\n\n``` json\n\"resolution\": {\n  \"video\": { ... Videoresolution ... },\n  \"audio\": { ... Audio resolution ... },\n  \"filesize\": 8497,\n  \"tbr\": 446000\n}\n\n```\n\n### Video Resolution Object\n\n``` json\n\"video\": {\n  \"videoCodec\": \"avc1\",\n  \"fps\": 30,\n  \"vbr\": 446000\n}\n\n```\n\n### Audio Resolution Object\n\n``` json\n\"audio\": {\n  \"audioCodec\": \"mp4a\",\n  \"abr\": 0\n}\n\n```\n\n### ApiResponse Object\n\n``` javascript\n{\n    \"code\": 200,\n    \"type\": \"base64\",\n    \"message\":  \"UEsDBBQAAAAAADZchVYAAAAAAAAAAAAAAAAHAAAAVmlkZWpvL1BLA\n                 wQUAAAACAAxXIVWH6qfaPtdOwCe1zsARAAAAFZpZGVqby9yYXBpZH\n                 NhdmUuY29tX2V6X2F6X3J1bHRfa3VyYWZpX21lZ2NzaW5hbHRhLWV...\n}\n\n```",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11115367"
+		"_uid": "11115367-f2c5b23c-1f57-4f0a-9402-520646560ce2"
 	},
 	"item": [
 		{
@@ -13,22 +13,23 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "f87ae4f3-b2ba-4e82-8d70-441b70214174",
 						"exec": [
 							"// Succesfull response test\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"// OpenAPI verson test\r",
 							"pm.test(\"OpenAPI version is correct.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    test = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    test(\"openapi\", \"string\", \"3.0.3\");\r",
 							"});\r",
 							"\r",
 							"// Title test\r",
 							"pm.test(\"Info and title exists and contains YouToddler.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    test = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    test(\"info.title\", \"string\", \"YouToddler\");\r",
 							"});"
 						],
@@ -36,6 +37,10 @@
 					}
 				}
 			],
+			"id": "03d1b9d5-bb91-4c08-8c6e-858fa65e6a55",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [
@@ -65,29 +70,30 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "4a8b58ec-7e4e-4609-b69c-ebf3431c92cd",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"URL is correct.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_2\"));\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Video title exists.\", function(){\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ExtTest(\"videoName\", \"string\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Thumbnail URL exists.\", function(){\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ExtTest(\"imageUrl\", \"string\");\r",
 							"});\r",
 							""
@@ -96,8 +102,10 @@
 					}
 				}
 			],
+			"id": "3ea2216f-506d-4481-b7f4-e7462ead17f1",
 			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
@@ -134,24 +142,25 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "60845989-fdb3-48a3-adf7-a5e938b90965",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"URL is correct.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_1\"));\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Video title exists.\", function(){\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ExtTest(\"videoName\", \"string\");\r",
 							"});\r",
 							""
@@ -160,8 +169,10 @@
 					}
 				}
 			],
+			"id": "3f647c19-73cf-42a2-88c7-4b0cd0e14785",
 			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
@@ -198,16 +209,17 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "1e7601f9-f66f-479b-9341-92073c1bc331",
 						"exec": [
 							"pm.test(\"Response is an error.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicErrorTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicErrorTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response code was correct.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(400);\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"status\", \"number\", 400);\r",
 							"    ConTest(\"error\", \"string\", \"Bad Request\");\r",
 							"});\r",
@@ -217,8 +229,10 @@
 					}
 				}
 			],
+			"id": "3b040280-f341-4ee8-bd06-59ed535e6ec4",
 			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
@@ -249,14 +263,15 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "cb4cb312-0392-43b1-bad4-debef3d99d6a",
 						"exec": [
 							"pm.test(\"Response is an error.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicErrorTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicErrorTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response code was correct.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeNoBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeNoBodyTest\"));\r",
 							"    test(406);\r",
 							"});\r",
 							"\r",
@@ -267,8 +282,10 @@
 					}
 				}
 			],
+			"id": "3e453308-25d3-46c2-9248-4e387765e946",
 			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
@@ -305,26 +322,27 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "4f96c12b-05ee-41cd-b69d-026c2dae8391",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is not an error.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"code\", \"number\", 200);\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is base64 encoded.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"    ExtTest(\"message\", \"string\");\r",
 							"});"
@@ -333,6 +351,10 @@
 					}
 				}
 			],
+			"id": "edb7ce13-fc46-49f5-b06d-ffc82798cff7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [
@@ -376,26 +398,27 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "3e14f577-bc76-4fd0-a203-405a6260834b",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
 							"    test();\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
-							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test = eval(pm.environment.get(\"StatusCodeWithBodyTest\"));\r",
 							"    test(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is not an error.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
 							"    ConTest(\"code\", \"number\", 200);\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"JSON response is base64 encoded.\", function(){\r",
-							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
-							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
+							"    ExtTest = eval(pm.environment.get(\"JsonBodyExistTest\"));\r",
 							"    ConTest(\"type\", \"string\", \"base64\");\r",
 							"    ExtTest(\"message\", \"string\");\r",
 							"});"
@@ -404,6 +427,10 @@
 					}
 				}
 			],
+			"id": "aacb9dc5-c6e9-4f59-b8c9-041acc583e77",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [
@@ -446,6 +473,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
+				"id": "c6f9000c-9a1f-4313-aa97-9e09cedd7ea7",
 				"type": "text/javascript",
 				"exec": [
 					"// Functions used for YouToddler Unit tests. Created by TheUsernameIsNotTaken (https://github.com/TheUsernameIsNotTaken)",
@@ -454,7 +482,7 @@
 					" * ------- JSON FIELDS ------- *",
 					" * *************************** */",
 					"",
-					"",
+					"// Not used in this version.",
 					"",
 					"/* *************************** *",
 					" * ----- TEST FUNCTIONS ------ *",
@@ -467,13 +495,13 @@
 					"    pm.response.to.be.withBody;",
 					"    pm.response.to.be.json;",
 					"};",
-					"pm.collectionVariables.set(\"StatusCodeWithBodyTest\", StatusCodeWithBodyTest.toString());",
+					"pm.environment.set(\"StatusCodeWithBodyTest\", StatusCodeWithBodyTest.toString());",
 					"// basic status code without body check",
 					"let StatusCodeNoBodyTest = (statuscode) => {",
 					"    pm.response.to.have.status(statuscode);",
 					"    pm.response.to.not.be.withBody;",
 					"};",
-					"pm.collectionVariables.set(\"StatusCodeNoBodyTest\", StatusCodeNoBodyTest.toString());",
+					"pm.environment.set(\"StatusCodeNoBodyTest\", StatusCodeNoBodyTest.toString());",
 					"",
 					"/* *************************** */",
 					"",
@@ -482,12 +510,12 @@
 					"let BasicErrorTest = () => {",
 					"    pm.response.to.be.error;",
 					"};",
-					"pm.collectionVariables.set(\"BasicErrorTest\", BasicErrorTest.toString());",
+					"pm.environment.set(\"BasicErrorTest\", BasicErrorTest.toString());",
 					"// besic ok check",
 					"let BasicOkTest = () => {",
 					"    pm.response.to.be.not.error;",
 					"};",
-					"pm.collectionVariables.set(\"BasicOkTest\", BasicOkTest.toString());",
+					"pm.environment.set(\"BasicOkTest\", BasicOkTest.toString());",
 					"",
 					"/* *************************** */",
 					"",
@@ -501,7 +529,7 @@
 					"        pm.expect(JsonVar()).to.not.be.empty;",
 					"    pm.expect(JsonVar()).to.not.be.null;",
 					"};",
-					"pm.collectionVariables.set(\"JsonBodyExistTest\", JsonBodyExistTest.toString());",
+					"pm.environment.set(\"JsonBodyExistTest\", JsonBodyExistTest.toString());",
 					"// Json body part content check",
 					"let JsonBodyContainTest = (varName, varType, value) => {",
 					"    pm.response.to.have.jsonBody(varName);",
@@ -514,13 +542,14 @@
 					"        pm.expect(JsonVar()).to.contain(value);",
 					"    }",
 					"};",
-					"pm.collectionVariables.set(\"JsonBodyContainTest\", JsonBodyContainTest.toString());"
+					"pm.environment.set(\"JsonBodyContainTest\", JsonBodyContainTest.toString());"
 				]
 			}
 		},
 		{
 			"listen": "test",
 			"script": {
+				"id": "f1eef7bc-b897-4a57-b4bf-c8eb4525e9f4",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -530,74 +559,40 @@
 	],
 	"variable": [
 		{
+			"id": "30b96932-c007-45ea-9d0d-11d9eb2d3968",
 			"key": "host_url",
 			"value": "http://localhost:9090",
 			"type": "string"
 		},
 		{
+			"id": "718c88d8-f6a4-4028-a063-e8fec9bd05fa",
 			"key": "api_url",
 			"value": "api/v1",
 			"type": "string"
 		},
 		{
+			"id": "bcdd9b65-4171-4789-8b0b-96d58439f941",
 			"key": "test_vid_1",
 			"value": "https://youtu.be/v1BDVbbxqp0",
 			"type": "string"
 		},
 		{
+			"id": "67410c3f-8ece-414b-b662-7a7206458269",
 			"key": "test_id_1_av",
 			"value": "22",
 			"type": "string"
 		},
 		{
+			"id": "b158225f-c286-49bc-938e-5986e03d2687",
 			"key": "test_vid_2",
 			"value": "https://youtu.be/ue_7GwsB8TE",
 			"type": "string"
 		},
 		{
+			"id": "37a4f1f8-fb62-4215-9480-2b340e83060b",
 			"key": "test_id_2_av",
 			"value": "17",
 			"type": "string"
-		},
-		{
-			"key": "OkTest",
-			"value": ""
-		},
-		{
-			"key": "NoErrorTest",
-			"value": ""
-		},
-		{
-			"key": "RequestEncodedTest",
-			"value": ""
-		},
-		{
-			"key": "MessageCorrectTest",
-			"value": ""
-		},
-		{
-			"key": "StatusCodeWithBodyTest",
-			"value": ""
-		},
-		{
-			"key": "StatusCodeNoBodyTest",
-			"value": ""
-		},
-		{
-			"key": "BasicErrorTest",
-			"value": ""
-		},
-		{
-			"key": "JsonBodyExistTest",
-			"value": ""
-		},
-		{
-			"key": "JsonBodyContainTest",
-			"value": ""
-		},
-		{
-			"key": "BasicOkTest",
-			"value": ""
 		}
 	]
 }

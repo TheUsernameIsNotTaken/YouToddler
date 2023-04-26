@@ -26,11 +26,11 @@ A Youtube video downloader OpenAPI project.
 
 You can find the defined OpenAPI [here](https://github.com/cant0r/YouToddler/blob/master/src/YouToddlerWebAPI/openapi.yaml)
 
-TODO: Insert future app link here.
-
 ## Testing
 
-Check the Postman tests in the [public YouToddler collection](https://www.postman.com/deep-breath-9000/workspace/youtoddler-webapi/overview), in the exported [collection json](https://github.com/cant0r/YouToddler/blob/master/src/YouToddlerWebAPI/YouToddler.postman_collection.json), or on the [Confluence page](https://manhatten.atlassian.net/wiki/spaces/AT/pages/7110657/OpenAPI+documentation#Testing).
+Check the Postman tests in the [public YouToddler API Definition & Collection](https://www.postman.com/deep-breath-9000/workspace/youtoddler-webapi/api/1926c395-68a1-475e-9cd0-f6025f2f5f0a?branch=WebAPI-tests).
+
+Her you will find the API definition, in OpenAPI 3.0, and the YouToddler Test collection, which contains the untit tests. These can also can be found in the postman folder in root.
 
 ## Build and run
 
