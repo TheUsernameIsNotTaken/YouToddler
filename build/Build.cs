@@ -36,9 +36,6 @@ partial class Build : NukeBuild
 
     public static int Main () => Execute<Build>(x => x.BuildAll);
 
-    [LocalExecutable("/usr/bin/bash")]
-    readonly Tool Bash;
-
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
@@ -64,20 +61,8 @@ partial class Build : NukeBuild
                 .SetProject(YouToddlerCliCsprojPath));
         });
 
-    Target BuildWebApi => _ => _
-        .Executes(() => 
-        {            
-            Log.Warning("Actual build will be handled by Docker");
-        });
-
-    Target BuildFrontend => _ => _
-        .Executes(() => 
-        {
-            Log.Warning("Actual build will be handled by Docker");
-        });
-
     Target BuildAll => _ => _
-        .DependsOn(BuildCli, BuildWebApi, BuildFrontend)
+        .DependsOn(BuildCli)
         .Executes(() =>
         {
             DockerLogin(_ => _
@@ -102,10 +87,6 @@ partial class Build : NukeBuild
         .DependsOn(BuildAll)
         .Executes(() => 
         {
-            DockerLogin(_ => _
-                .SetUsername(DOCKER_USERNAME)
-                .SetPassword(DOCKER_PASSWORD));
-            
             DockerPush(_ => _
                 .SetName("youtoddler/backend:latest"));
                 
