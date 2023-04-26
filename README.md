@@ -5,6 +5,8 @@ Group project of the people of the Manhattan Project.
 ## Description
 An on-premise download manager for youtube-dlp.
 
+TODO IN THIS BRANCH: Solve version control updates by environment variables. And delete this from readme.
+
 ## Installation Guide
 You can either build the project yourself or use the prebuilt Docker images.
 
