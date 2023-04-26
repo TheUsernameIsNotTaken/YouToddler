@@ -168,7 +168,7 @@ public class DownloadApiController implements DownloadApi {
                 Future<?> future = Executors.newSingleThreadExecutor().submit(streamGobbler);
                 int exitCode = process.waitFor();
                 assert exitCode == 0;
-                future.get(600, TimeUnit.SECONDS);
+                future.get(1200, TimeUnit.SECONDS);
                 log.info("Finished download execution.");
                 // Check if download is successfull
                 if(downloadedZip.isDefined()){

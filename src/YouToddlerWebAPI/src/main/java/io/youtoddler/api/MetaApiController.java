@@ -120,7 +120,7 @@ public class MetaApiController implements MetaApi {
                 Future<?> future = Executors.newSingleThreadExecutor().submit(streamGobbler);
                 int exitCode = process.waitFor();
                 assert exitCode == 0;
-                future.get(60, TimeUnit.SECONDS);
+                future.get(90, TimeUnit.SECONDS);
                 log.info("Finished getting metadata.");
                 // Generate the metadata object.
                 Path metadataJson = Paths.get(toddlerStaging.toString(), "format_metadata.json");
