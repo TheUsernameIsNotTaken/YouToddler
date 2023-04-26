@@ -36,7 +36,7 @@ partial class Build : NukeBuild
 
     public static int Main () => Execute<Build>(x => x.BuildAll);
 
-    [PathExecutable]
+    [LocalExecutable("/usr/bin/bash")]
     readonly Tool Bash;
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
