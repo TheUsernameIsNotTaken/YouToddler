@@ -101,8 +101,7 @@ partial class Build : NukeBuild
     Target ReleaseWebApi => _ => _
         .Executes(() => 
         {
-            var envVariables = File.ReadAllLines(RootDirectory / ".env").ToDictionary(k => k.Split('=')[0], v => v.Split('=')[1]);
-            PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath, environmentVariables: envVariables);
+            PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
         });
 
     Target ReleaseFrontend => _ => _

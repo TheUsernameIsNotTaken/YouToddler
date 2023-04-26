@@ -2,7 +2,7 @@ version: "3.9"
 services:
   backend:
     image: "youtoddler/backend:latest"
-    command: java -jar youtoddler-spring-$${API_VERSION}.jar
+    command: java -jar youtoddler-spring-${YOUTODDLER_API_VERSION}.jar
     ports:
       - "9090:9090"
   frontend:

@@ -4,7 +4,10 @@
     <artifactId>youtoddler-spring</artifactId>
     <packaging>jar</packaging>
     <name>youtoddler-spring</name>
-    <version>${env.API_VERSION}</version>
+    <!--> !!! ***
+        TODO: Update YOUTODDLER_API_VERSION in .env too!!!
+    !!! *** <-->
+    <version>0.7.3</version>
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -22,6 +25,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <YOUTODDLER_API_VERSION>{$version}</YOUTODDLER_API_VERSION>
+                    </environmentVariables>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
