@@ -63,7 +63,7 @@ partial class Build : NukeBuild
     Target BuildWebApi => _ => _
         .Executes(() => 
         {
-            PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
+            PowerShell(@"./mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
         });
 
     Target BuildFrontend => _ => _
