@@ -104,11 +104,11 @@ public class MetaApiController implements MetaApi {
                     builder.command("powershell.exe", ".\\YouToddlerCLI", "describe ",
                             "-t", url);
                 } else {
-                    builder.command("sh", "./YouToddlerCLI", "describe",
+                    builder.command("./YouToddlerCLI", "describe",
                             "-t", url);
                 }
                 builder.directory(new File(toddlerCliDir.toString()));
-                //log.info("Builded command: " + builder.command().toString());
+                log.debug("Builded command: " + builder.command().toString());
                 Process process = builder.start();
                 //  - gobble up the proccess
                 log.debug("Starting proccess gobbler.");
@@ -120,7 +120,7 @@ public class MetaApiController implements MetaApi {
                 Future<?> future = Executors.newSingleThreadExecutor().submit(streamGobbler);
                 int exitCode = process.waitFor();
                 assert exitCode == 0;
-                future.get(60, TimeUnit.SECONDS);
+                future.get(90, TimeUnit.SECONDS);
                 log.info("Finished getting metadata.");
                 // Generate the metadata object.
                 Path metadataJson = Paths.get(toddlerStaging.toString(), "format_metadata.json");
