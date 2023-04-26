@@ -45,6 +45,9 @@ partial class Build : NukeBuild
     [Parameter] [Secret]
     readonly string DOCKER_PASSWORD;
 
+    [Parameter]
+    readonly bool IsContainerBuild = true;
+
     [Solution]
     readonly Solution Solution;
 
@@ -91,7 +94,7 @@ partial class Build : NukeBuild
         {
             DotNetPublish(_ => _
                 .SetConfiguration(Configuration)
-                .SetRuntime("linux-x64")
+                .SetRuntime(DetermineRFIdentifier())
                 .SetSelfContained(true)
                 .SetOutput(Path.Combine(Path.GetDirectoryName(YouToddlerCliCsprojPath), "publish/"))
                 .SetProject(YouToddlerCliCsprojPath));
@@ -134,4 +137,12 @@ partial class Build : NukeBuild
             DockerPush(_ => _
                 .SetName("youtoddler/frontend:latest"));
         });
+
+        private string DetermineRFIdentifier()
+        {
+            if(OperatingSystem.IsLinux() || IsContainerBuild)
+                return "linux-x64";
+            else
+                return "win-x64";
+        }
 }
