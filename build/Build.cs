@@ -9,6 +9,7 @@ using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 using Nuke.Common.CI.GitHubActions;
 using System;
 using System.IO;
+using Nuke.Common.Tooling;
 
 [GitHubActions(
     "build-all-and-validate-nightly",
@@ -34,6 +35,9 @@ partial class Build : NukeBuild
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
     public static int Main () => Execute<Build>(x => x.BuildAll);
+
+    [PathExecutable]
+    readonly Tool Bash;
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -63,7 +67,10 @@ partial class Build : NukeBuild
     Target BuildWebApi => _ => _
         .Executes(() => 
         {
-            PowerShell(@"./mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
+            if (DetermineRFIdentifier().StartsWith("linux"))
+                Bash(@$"cd {YouToddlerWebApiPath} && ./mvnw clean package spring-boot:repackage");
+            else
+                PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
         });
 
     Target BuildFrontend => _ => _
