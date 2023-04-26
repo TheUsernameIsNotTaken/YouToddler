@@ -68,7 +68,8 @@ partial class Build : NukeBuild
         .Executes(() => 
         {
             if (DetermineRFIdentifier().StartsWith("linux"))
-                Bash(@$"cd src/YouToddlerWebAPI/ && ./mvnw clean package spring-boot:repackage");
+                Bash(@$"pwd");
+                //Bash(@$"cd src/YouToddlerWebAPI/ && ./mvnw clean package spring-boot:repackage");
             else
                 PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
         });
