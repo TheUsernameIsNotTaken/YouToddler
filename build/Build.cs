@@ -65,9 +65,7 @@ partial class Build : NukeBuild
         .DependsOn(BuildCli)
         .Executes(() =>
         {
-            DockerLogin(_ => _
-                .SetUsername(DOCKER_USERNAME)
-                .SetPassword(DOCKER_PASSWORD));
+            PowerShell(@$"Write-Host ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin", YouToddlerWebApiPath);
 
             DockerBuild(_ => _
                 .SetPath(RootDirectory / "src/")
