@@ -14,7 +14,7 @@ using System.IO;
     "build-all-and-validate-nightly",
     GitHubActionsImage.Ubuntu2204,
     GitHubActionsImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI), nameof(PublishAll)},
+    InvokedTargets = new[] {nameof(PublishAll)},
     OnCronSchedule = "* 0 * * *",
     ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
     AutoGenerate = true
@@ -23,7 +23,7 @@ using System.IO;
     "pr-pipeline",
     GitHubActionsImage.UbuntuLatest,
     GitHubActionsImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
+    InvokedTargets = new[] {nameof(BuildAll)},
     OnPullRequestBranches = new[] { "master"},
     AutoGenerate = true
 )]
@@ -35,7 +35,7 @@ partial class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main () => Execute<Build>(x => x.CompileAll);
+    public static int Main () => Execute<Build>(x => x.BuildAll);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -51,45 +51,7 @@ partial class Build : NukeBuild
     [Solution]
     readonly Solution Solution;
 
-    Target CompileBackend => _ => _
-        .Executes(() =>
-        {
-            Log.Information("Building .NET Backend..");
-            DotNetBuild(_ => _
-                .SetProjectFile(Solution)
-                .SetConfiguration(Configuration)); 
-            Log.Information("Built .NET Backend.");
-        });
-
-    Target CompileWebApi => _ => _
-        .Executes(() =>
-        {
-            Log.Information("Here you'll be calling your build scripts for the WebAPI.");
-        });
-
-    Target CompileFrontend => _ => _
-        .Executes(() =>
-        {
-            Log.Information("Here you'll be calling your build scripts for the Frontend.");            
-        });
-
-    Target CompileAll => _ => _
-        .DependsOn(CompileBackend, CompileWebApi, CompileFrontend)
-        .Executes(() =>
-        {
-        });
-
-    Target ValidateCLI => _ => _
-        .DependsOn(CompileBackend)
-        .Executes(() => {
-            DotNetRun(_ => _
-            .EnableNoBuild()
-            .EnableNoRestore()
-            .SetConfiguration(Configuration)
-            .SetProjectFile(YouToddlerCliCsprojPath));
-        });
-
-    Target ReleaseCli => _ => _
+    Target BuildCli => _ => _
         .Executes(() => 
         {
             DotNetPublish(_ => _
@@ -100,21 +62,21 @@ partial class Build : NukeBuild
                 .SetProject(YouToddlerCliCsprojPath));
         });
 
-    Target ReleaseWebApi => _ => _
+    Target BuildWebApi => _ => _
         .Executes(() => 
         {
             PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
         });
 
-    Target ReleaseFrontend => _ => _
+    Target BuildFrontend => _ => _
         .Executes(() => 
         {
             Log.Warning("Actual deployment will be handled by Docker");
         });
 
-    Target PublishAll => _ => _
-        .DependsOn(ReleaseCli, ReleaseWebApi, ReleaseFrontend)
-        .Executes(() => 
+    Target BuildAll => _ => _
+        .DependsOn(BuildCli, BuildWebApi, BuildFrontend)
+        .Executes(() =>
         {
             DockerLogin(_ => _
                 .SetUsername(DOCKER_USERNAME)
@@ -130,12 +92,25 @@ partial class Build : NukeBuild
                 .SetPath(YouToddlerFrontendPath)
                 .SetTag("youtoddler/frontend:latest")
                 .SetFile(Path.Join(YouToddlerFrontendPath, "Dockerfile")));
+
+            Log.Information("All Docker images were built successfully.");
+        });
+
+    Target PublishAll => _ => _
+        .DependsOn(BuildAll)
+        .Executes(() => 
+        {
+            DockerLogin(_ => _
+                .SetUsername(DOCKER_USERNAME)
+                .SetPassword(DOCKER_PASSWORD));
             
             DockerPush(_ => _
                 .SetName("youtoddler/backend:latest"));
                 
             DockerPush(_ => _
                 .SetName("youtoddler/frontend:latest"));
+
+            Log.Information("All Docker images were published successfully.");
         });
 
         private string DetermineRFIdentifier()
