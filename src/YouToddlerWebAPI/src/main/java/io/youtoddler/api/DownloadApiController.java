@@ -121,7 +121,7 @@ public class DownloadApiController implements DownloadApi {
                 }
                 */
                 // Needed main paths of operation
-                Path toddlerCliDir = Paths.get("");
+                Path toddlerCliDir = Paths.get("").toRealPath();
                 //  - Read in staging directories from file
                 Path settingJson = Paths.get(toddlerCliDir.toString(), "appsettings.json");
                 FileReader fr = new FileReader(settingJson.toString());
