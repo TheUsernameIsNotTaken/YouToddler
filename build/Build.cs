@@ -13,7 +13,6 @@ using System.IO;
 [GitHubActions(
     "build-all-and-validate-nightly",
     GitHubActionsImage.Ubuntu2204,
-    GitHubActionsImage.WindowsLatest,
     InvokedTargets = new[] {nameof(PublishAll)},
     OnCronSchedule = "* 0 * * *",
     ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
@@ -22,7 +21,6 @@ using System.IO;
 [GitHubActions(
     "pr-pipeline",
     GitHubActionsImage.UbuntuLatest,
-    GitHubActionsImage.WindowsLatest,
     InvokedTargets = new[] {nameof(BuildAll)},
     OnPullRequestBranches = new[] { "master"},
     AutoGenerate = true
