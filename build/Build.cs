@@ -24,6 +24,7 @@ using Nuke.Common.Tooling;
     GitHubActionsImage.UbuntuLatest,
     InvokedTargets = new[] {nameof(BuildAll)},
     OnPullRequestBranches = new[] { "master"},
+    ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
     AutoGenerate = true
 )]
 partial class Build : NukeBuild
