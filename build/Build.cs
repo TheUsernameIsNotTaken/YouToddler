@@ -66,18 +66,14 @@ partial class Build : NukeBuild
 
     Target BuildWebApi => _ => _
         .Executes(() => 
-        {
-            if (DetermineRFIdentifier().StartsWith("linux"))
-                Bash(@$"pwd");
-                //Bash(@$"cd src/YouToddlerWebAPI/ && ./mvnw clean package spring-boot:repackage");
-            else
-                PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
+        {            
+            Log.Warning("Actual build will be handled by Docker");
         });
 
     Target BuildFrontend => _ => _
         .Executes(() => 
         {
-            Log.Warning("Actual deployment will be handled by Docker");
+            Log.Warning("Actual build will be handled by Docker");
         });
 
     Target BuildAll => _ => _
