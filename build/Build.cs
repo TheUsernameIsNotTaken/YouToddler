@@ -9,7 +9,6 @@ using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 using Nuke.Common.CI.GitHubActions;
 using System;
 using System.IO;
-using System.Linq;
 
 [GitHubActions(
     "build-all-and-validate-nightly",
