@@ -1,11 +1,13 @@
 FROM eclipse-temurin:8-focal
 
 # We assume the project is already compiled
-COPY YouToddlerWebAPI/ /build/
+COPY YouToddlerWebAPI/* /build/
 WORKDIR /build/
-RUN chmod a+rx mvnw
-RUN ./mvnw clean package spring-boot:repackage
-RUN cp target/*.jar /webapi/
+RUN chmod a+rx mvnw &&\
+    ls -l mnvw &&\
+    .\mvnw clean package spring-boot:repackage &&\
+    mkdir /webabpi/ &&\
+    cp target/*-jar /webabpi/
 COPY YouToddlerCLI/publish/* /webapi/
 
 WORKDIR /webapi/
