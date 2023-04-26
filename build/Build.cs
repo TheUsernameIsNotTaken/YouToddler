@@ -9,6 +9,7 @@ using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 using Nuke.Common.CI.GitHubActions;
 using System;
 using System.IO;
+using System.Linq;
 
 [GitHubActions(
     "build-all-and-validate-nightly",
@@ -100,7 +101,8 @@ partial class Build : NukeBuild
     Target ReleaseWebApi => _ => _
         .Executes(() => 
         {
-            PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
+            var envVariables = File.ReadAllLines(RootDirectory / ".env").ToDictionary(k => k.Split('=')[0], v => v.Split('=')[1]);
+            PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath, environmentVariables: envVariables);
         });
 
     Target ReleaseFrontend => _ => _
