@@ -27,7 +27,7 @@ RUN chmod a+rx /usr/local/bin/yt-dlp
 COPY YouToddlerWebAPI /build/
 WORKDIR /build/
 RUN chmod +x mvnw &&\
-    ls -al && ./mvnw clean package spring-boot:repackage &&\
+    ./mvnw clean package spring-boot:repackage &&\
     mkdir /webapi/ &&\
     cp target/*.jar /webapi/
 COPY YouToddlerCLI/publish/* /webapi/
