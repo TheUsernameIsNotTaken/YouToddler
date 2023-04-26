@@ -31,8 +31,6 @@ import java.util.function.Consumer;
 @RestController
 public class MetaApiController implements MetaApi {
 
-    public final static String CLI_SUBPATH = "YouToddlerCLI/bin/Release/net7.0";
-
     private static final Logger log = LoggerFactory.getLogger(MetaApiController.class);
 
     private final ObjectMapper objectMapper;
@@ -84,8 +82,7 @@ public class MetaApiController implements MetaApi {
             */
             try {
                 // Needed main paths of operation
-                Path runParent = Paths.get("").toRealPath().getParent();
-                Path toddlerCliDir = Paths.get(runParent.toString(),CLI_SUBPATH);
+                Path toddlerCliDir = Paths.get("");
                 //  - Read in staging directories from file
                 Path settingJson = Paths.get(toddlerCliDir.toString(), "appsettings.json");
                 FileReader fr = new FileReader(settingJson.toString());
@@ -100,7 +97,6 @@ public class MetaApiController implements MetaApi {
                 //  - Check os
                 boolean isWindows = System.getProperty("os.name")
                         .toLowerCase().startsWith("windows");
-                log.debug(toddlerCliDir.toString());
                 //  - Get metadata by URL.
                 ProcessBuilder builder = new ProcessBuilder();
                 log.info("Start getting metadata for " + url);
