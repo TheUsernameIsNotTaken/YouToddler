@@ -148,13 +148,13 @@ public class DownloadApiController implements DownloadApi {
                             audioID != null ? ("-a " + Long.toString(audioID)) : (""),
                             "-t", url);
                 } else {
-                    builder.command("sh", "./YouToddlerCLI", "download",
+                    builder.command("./YouToddlerCLI", "download",
                             videoID != null ? ("-v " + Long.toString(videoID)) : (""),
                             audioID != null ? ("-a " + Long.toString(audioID)) : (""),
                             "-t", url);
                 }
                 builder.directory(new File(toddlerCliDir.toString()));
-                //log.info("Builded command: " + builder.command().toString());
+                log.debug("Builded command: " + builder.command().toString());
                 Process process = builder.start();
                 //  - gobble up the proccess
                 ZipFinder downloadedZip = new ZipFinder();

@@ -104,11 +104,11 @@ public class MetaApiController implements MetaApi {
                     builder.command("powershell.exe", ".\\YouToddlerCLI", "describe ",
                             "-t", url);
                 } else {
-                    builder.command("sh", "./YouToddlerCLI", "describe",
+                    builder.command("./YouToddlerCLI", "describe",
                             "-t", url);
                 }
                 builder.directory(new File(toddlerCliDir.toString()));
-                //log.info("Builded command: " + builder.command().toString());
+                log.debug("Builded command: " + builder.command().toString());
                 Process process = builder.start();
                 //  - gobble up the proccess
                 log.debug("Starting proccess gobbler.");
