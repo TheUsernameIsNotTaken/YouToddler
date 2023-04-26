@@ -66,7 +66,7 @@ partial class Build : NukeBuild
         .DependsOn(BuildCli)
         .Executes(() =>
         {
-            PowerShell(@$"(Import-Module -Name Common) -and (echo ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin)", YouToddlerWebApiPath, logOutput: false, logInvocation: false);
+            PowerShell(@$"(Get-InstalledModule) -and (echo ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin)", YouToddlerWebApiPath, logOutput: false, logInvocation: false);
 
             DockerBuild(_ => _
                 .SetPath(RootDirectory / "src/")
