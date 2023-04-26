@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "f2c5b23c-1f57-4f0a-9402-520646560ce2",
-		"name": "YouToddler",
+		"name": "YouToddler Test",
 		"description": "## Introduction\n\nYouToddler is an open-source YouTube downloader API passion project by 4 collage students from UniDeb.\n\nThe API is defined with [Swagger](https://editor.swagger.io), and it's definition are always available, by calling {{host_url}}/{{api_url}}/api-docs (the Get Swagger Documentation call) in your browser any time.\n\n## About the API\n\nIt is a REST API, so keeping the standard principles are always desired. Meaning It MUST HAVE Uniform interface, MUST HAVE Client-server decoupling, MUST BE Stateless, SHOULD HAVE Cacheability, MUST BE prepared for Layered system architecture, and COULD support code on demand. More infromation [here](https://www.ibm.com/topics/rest-apis).\n\n## Data models\n\n### Metadata Object\n\n``` json\n{\n  \"url\": \"https://youtu.be/dQw4w9WgXcQ\",\n  \"videoName\": \"Example Name gone wrong! | !!!NOT CLICKBAIT!!!\",\n  \"imageUrl\": \"https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg\",\n  \"formats\": [\n    { ... format_1 ... },\n    { ... format_2 ... } ...\n  ]\n}\n\n```\n\n### Format object\n\n[Link to original definition.](https://manhatten.atlassian.net/wiki/spaces/AT/pages/4161559/Video+audio+formats#JSON)\n\n``` json\n{\n  \"id\": 22,\n  \"name\": \"mp4\",\n  \"resolution\": { ... resolution data ... }\n}\n\n```\n\n### Resolution Object\n\n``` json\n\"resolution\": {\n  \"video\": { ... Videoresolution ... },\n  \"audio\": { ... Audio resolution ... },\n  \"filesize\": 8497,\n  \"tbr\": 446000\n}\n\n```\n\n### Video Resolution Object\n\n``` json\n\"video\": {\n  \"videoCodec\": \"avc1\",\n  \"fps\": 30,\n  \"vbr\": 446000\n}\n\n```\n\n### Audio Resolution Object\n\n``` json\n\"audio\": {\n  \"audioCodec\": \"mp4a\",\n  \"abr\": 0\n}\n\n```\n\n### ApiResponse Object\n\n``` javascript\n{\n    \"code\": 200,\n    \"type\": \"base64\",\n    \"message\":  \"UEsDBBQAAAAAADZchVYAAAAAAAAAAAAAAAAHAAAAVmlkZWpvL1BLA\n                 wQUAAAACAAxXIVWH6qfaPtdOwCe1zsARAAAAFZpZGVqby9yYXBpZH\n                 NhdmUuY29tX2V6X2F6X3J1bHRfa3VyYWZpX21lZ2NzaW5hbHRhLWV...\n}\n\n```",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_uid": "11115367-f2c5b23c-1f57-4f0a-9402-520646560ce2"
@@ -84,7 +84,7 @@
 							"\r",
 							"pm.test(\"URL is correct.\", function(){\r",
 							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
-							"    ConTest(\"url\", \"string\", pm.environment.get(\"test_vid_2\"));\r",
+							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_2\"));\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Video title exists.\", function(){\r",
@@ -156,7 +156,7 @@
 							"\r",
 							"pm.test(\"URL is correct.\", function(){\r",
 							"    ConTest = eval(pm.environment.get(\"JsonBodyContainTest\"));\r",
-							"    ConTest(\"url\", \"string\", pm.environment.get(\"test_vid_1\"));\r",
+							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_1\"));\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Video title exists.\", function(){\r",
@@ -473,7 +473,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "8b8ac0ce-d199-493d-a08d-5870b13f2dca",
+				"id": "c6f9000c-9a1f-4313-aa97-9e09cedd7ea7",
 				"type": "text/javascript",
 				"exec": [
 					"// Functions used for YouToddler Unit tests. Created by TheUsernameIsNotTaken (https://github.com/TheUsernameIsNotTaken)",
@@ -549,7 +549,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "e6e1eb26-fe56-42b5-aed5-9abe73e5733e",
+				"id": "f1eef7bc-b897-4a57-b4bf-c8eb4525e9f4",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -559,90 +559,40 @@
 	],
 	"variable": [
 		{
-			"id": "5c0ea8d0-1ba4-4263-af73-e39eaa3a61f7",
+			"id": "30b96932-c007-45ea-9d0d-11d9eb2d3968",
 			"key": "host_url",
 			"value": "http://localhost:9090",
 			"type": "string"
 		},
 		{
-			"id": "7ea0240e-7cb0-4b89-928b-209d6ca62cd1",
+			"id": "718c88d8-f6a4-4028-a063-e8fec9bd05fa",
 			"key": "api_url",
 			"value": "api/v1",
 			"type": "string"
 		},
 		{
-			"id": "e3439290-404b-4fda-bec5-7dae0f653fef",
+			"id": "bcdd9b65-4171-4789-8b0b-96d58439f941",
 			"key": "test_vid_1",
 			"value": "https://youtu.be/v1BDVbbxqp0",
 			"type": "string"
 		},
 		{
-			"id": "f1b9c05d-06be-463b-b539-9743c62bb892",
+			"id": "67410c3f-8ece-414b-b662-7a7206458269",
 			"key": "test_id_1_av",
 			"value": "22",
 			"type": "string"
 		},
 		{
-			"id": "fcaeb869-a02f-4cd8-85e3-a58671af029d",
+			"id": "b158225f-c286-49bc-938e-5986e03d2687",
 			"key": "test_vid_2",
 			"value": "https://youtu.be/ue_7GwsB8TE",
 			"type": "string"
 		},
 		{
-			"id": "c3de586c-2323-49a1-89cc-f4552531c82a",
+			"id": "37a4f1f8-fb62-4215-9480-2b340e83060b",
 			"key": "test_id_2_av",
 			"value": "17",
 			"type": "string"
-		},
-		{
-			"id": "c8de39c6-737d-4d42-9aaf-de42cfb0c2bd",
-			"key": "OkTest",
-			"value": ""
-		},
-		{
-			"id": "52b5bfbc-331d-469f-9d7f-2cfb139bc278",
-			"key": "NoErrorTest",
-			"value": ""
-		},
-		{
-			"id": "07c78da4-791d-4dc1-89e6-c2704d3f9006",
-			"key": "RequestEncodedTest",
-			"value": ""
-		},
-		{
-			"id": "3fa93b91-8bf1-4c0f-aa32-e3880a236221",
-			"key": "MessageCorrectTest",
-			"value": ""
-		},
-		{
-			"id": "c83340cf-ca13-47d9-9396-df0c1408c47d",
-			"key": "StatusCodeWithBodyTest",
-			"value": ""
-		},
-		{
-			"id": "6315f938-485d-406e-a5c5-c1a7cb10e70d",
-			"key": "StatusCodeNoBodyTest",
-			"value": ""
-		},
-		{
-			"id": "8f1e4188-697f-4172-8867-593f2a9154a5",
-			"key": "BasicErrorTest",
-			"value": ""
-		},
-		{
-			"id": "55d758db-6fd0-418d-a2e0-4edbfe863eb9",
-			"key": "JsonBodyExistTest",
-			"value": ""
-		},
-		{
-			"id": "ab4ab2f8-f445-4282-a236-0ce7b240647d",
-			"key": "JsonBodyContainTest",
-			"value": ""
-		},
-		{
-			"id": "57695eb6-e6e5-4c85-8898-b04e7e4d8a42",
-			"key": "BasicOkTest",
-			"value": ""
 		}
 	]
 }
