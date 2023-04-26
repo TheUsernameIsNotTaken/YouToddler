@@ -5,7 +5,7 @@ COPY YouToddlerWebAPI/ /build/
 WORKDIR /build/
 RUN chmod a+rx mvnw
 RUN ./mvnw clean package spring-boot:repackage
-RUN cp YouToddlerWebAPI/target/*.jar /webapi/
+RUN cp target/*.jar /webapi/
 COPY YouToddlerCLI/publish/* /webapi/
 
 WORKDIR /webapi/
