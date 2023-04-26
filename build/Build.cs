@@ -66,6 +66,7 @@ partial class Build : NukeBuild
         .DependsOn(BuildCli)
         .Executes(() =>
         {
+            PowerShell("dotnet tool install Nuke.GlobalTool --global");
             PowerShell(@$"Write-Host ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin", YouToddlerWebApiPath, logOutput: false, logInvocation: false);
 
             DockerBuild(_ => _
