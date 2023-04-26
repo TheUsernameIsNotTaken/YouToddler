@@ -18,6 +18,14 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
+        "DOCKER_PASSWORD": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
+        "DOCKER_USERNAME": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
@@ -76,6 +84,10 @@
               "CompileBackend",
               "CompileFrontend",
               "CompileWebApi",
+              "PublishAll",
+              "ReleaseCli",
+              "ReleaseFrontend",
+              "ReleaseWebApi",
               "ValidateCLI"
             ]
           }
@@ -94,6 +106,10 @@
               "CompileBackend",
               "CompileFrontend",
               "CompileWebApi",
+              "PublishAll",
+              "ReleaseCli",
+              "ReleaseFrontend",
+              "ReleaseWebApi",
               "ValidateCLI"
             ]
           }

@@ -33,8 +33,11 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd CompileAll ValidateCLI'
-        run: ./build.cmd CompileAll ValidateCLI
+      - name: Run './build.cmd CompileAll ValidateCLI PublishAll'
+        run: ./build.cmd CompileAll ValidateCLI PublishAll
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   windows-latest:
     name: windows-latest
     runs-on: windows-latest
@@ -47,5 +50,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd CompileAll ValidateCLI'
-        run: ./build.cmd CompileAll ValidateCLI
+      - name: Run './build.cmd CompileAll ValidateCLI PublishAll'
+        run: ./build.cmd CompileAll ValidateCLI PublishAll
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

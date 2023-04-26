@@ -2,22 +2,27 @@ using Serilog;
 using Nuke.Common;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Docker;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.Docker.DockerTasks;
+using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 using Nuke.Common.CI.GitHubActions;
+using System;
+using System.IO;
 
 [GitHubActions(
     "build-all-and-validate-nightly",
     GitHubActionsImage.Ubuntu2204,
     GitHubActionsImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
+    InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI), nameof(PublishAll)},
     OnCronSchedule = "* 0 * * *",
+    ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
     AutoGenerate = true
 )]
 [GitHubActions(
     "pr-pipeline",
     GitHubActionsImage.UbuntuLatest,
     GitHubActionsImage.WindowsLatest,
-    GitHubActionsImage.MacOsLatest,
     InvokedTargets = new[] { nameof(CompileAll), nameof(ValidateCLI)},
     OnPullRequestBranches = new[] { "master"},
     AutoGenerate = true
@@ -34,6 +39,11 @@ partial class Build : NukeBuild
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+
+    [Parameter] [Secret]
+    readonly string DOCKER_USERNAME;
+    [Parameter] [Secret]
+    readonly string DOCKER_PASSWORD;
 
     [Solution]
     readonly Solution Solution;
@@ -76,4 +86,52 @@ partial class Build : NukeBuild
             .SetProjectFile(YouToddlerCliCsprojPath));
         });
 
+    Target ReleaseCli => _ => _
+        .Executes(() => 
+        {
+            DotNetPublish(_ => _
+                .SetConfiguration(Configuration)
+                .SetRuntime(OperatingSystem.IsWindows() ? "win-x64" : "linux-x64")
+                .SetSelfContained(true)
+                .SetOutput(Path.Combine(Path.GetDirectoryName(YouToddlerCliCsprojPath), "publish/"))
+                .SetProject(YouToddlerCliCsprojPath));
+        });
+
+    Target ReleaseWebApi => _ => _
+        .Executes(() => 
+        {
+            PowerShell(@".\mvnw clean package spring-boot:repackage", YouToddlerWebApiPath);
+        });
+
+    Target ReleaseFrontend => _ => _
+        .Executes(() => 
+        {
+            Log.Warning("Actual deployment will be handled by Docker");
+        });
+
+    Target PublishAll => _ => _
+        .DependsOn(ReleaseCli, ReleaseWebApi, ReleaseFrontend)
+        .Executes(() => 
+        {
+            DockerLogin(_ => _
+                .SetUsername(DOCKER_USERNAME)
+                .SetPassword(DOCKER_PASSWORD));
+
+            DockerBuild(_ => _
+                .SetPath(RootDirectory / "src/")
+                .SetTag("youtoddler/backend:latest")
+                .SetFile(Path.Join(YouToddlerWebApiPath, "Dockerfile"))
+                );
+
+            DockerBuild(_ => _
+                .SetPath(YouToddlerFrontendPath)
+                .SetTag("youtoddler/frontend:latest")
+                .SetFile(Path.Join(YouToddlerFrontendPath, "Dockerfile")));
+            
+            DockerPush(_ => _
+                .SetName("youtoddler/backend:latest"));
+                
+            DockerPush(_ => _
+                .SetName("youtoddler/frontend:latest"));
+        });
 }
