@@ -91,7 +91,7 @@ partial class Build : NukeBuild
         {
             DotNetPublish(_ => _
                 .SetConfiguration(Configuration)
-                .SetRuntime(OperatingSystem.IsWindows() ? "win-x64" : "linux-x64")
+                .SetRuntime("linux-x64")
                 .SetSelfContained(true)
                 .SetOutput(Path.Combine(Path.GetDirectoryName(YouToddlerCliCsprojPath), "publish/"))
                 .SetProject(YouToddlerCliCsprojPath));
