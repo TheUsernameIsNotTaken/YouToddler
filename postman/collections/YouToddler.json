@@ -1,0 +1,648 @@
+{
+	"info": {
+		"_postman_id": "f2c5b23c-1f57-4f0a-9402-520646560ce2",
+		"name": "YouToddler",
+		"description": "## Introduction\n\nYouToddler is an open-source YouTube downloader API passion project by 4 collage students from UniDeb.\n\nThe API is defined with [Swagger](https://editor.swagger.io), and it's definition are always available, by calling {{host_url}}/{{api_url}}/api-docs (the Get Swagger Documentation call) in your browser any time.\n\n## About the API\n\nIt is a REST API, so keeping the standard principles are always desired. Meaning It MUST HAVE Uniform interface, MUST HAVE Client-server decoupling, MUST BE Stateless, SHOULD HAVE Cacheability, MUST BE prepared for Layered system architecture, and COULD support code on demand. More infromation [here](https://www.ibm.com/topics/rest-apis).\n\n## Data models\n\n### Metadata Object\n\n``` json\n{\n  \"url\": \"https://youtu.be/dQw4w9WgXcQ\",\n  \"videoName\": \"Example Name gone wrong! | !!!NOT CLICKBAIT!!!\",\n  \"imageUrl\": \"https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg\",\n  \"formats\": [\n    { ... format_1 ... },\n    { ... format_2 ... } ...\n  ]\n}\n\n```\n\n### Format object\n\n[Link to original definition.](https://manhatten.atlassian.net/wiki/spaces/AT/pages/4161559/Video+audio+formats#JSON)\n\n``` json\n{\n  \"id\": 22,\n  \"name\": \"mp4\",\n  \"resolution\": { ... resolution data ... }\n}\n\n```\n\n### Resolution Object\n\n``` json\n\"resolution\": {\n  \"video\": { ... Videoresolution ... },\n  \"audio\": { ... Audio resolution ... },\n  \"filesize\": 8497,\n  \"tbr\": 446000\n}\n\n```\n\n### Video Resolution Object\n\n``` json\n\"video\": {\n  \"videoCodec\": \"avc1\",\n  \"fps\": 30,\n  \"vbr\": 446000\n}\n\n```\n\n### Audio Resolution Object\n\n``` json\n\"audio\": {\n  \"audioCodec\": \"mp4a\",\n  \"abr\": 0\n}\n\n```\n\n### ApiResponse Object\n\n``` javascript\n{\n    \"code\": 200,\n    \"type\": \"base64\",\n    \"message\":  \"UEsDBBQAAAAAADZchVYAAAAAAAAAAAAAAAAHAAAAVmlkZWpvL1BLA\n                 wQUAAAACAAxXIVWH6qfaPtdOwCe1zsARAAAAFZpZGVqby9yYXBpZH\n                 NhdmUuY29tX2V6X2F6X3J1bHRfa3VyYWZpX21lZ2NzaW5hbHRhLWV...\n}\n\n```",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "11115367-f2c5b23c-1f57-4f0a-9402-520646560ce2"
+	},
+	"item": [
+		{
+			"name": "Get Swagger Documentation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Succesfull response test\r",
+							"pm.test(\"Response was successfull.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test(200);\r",
+							"});\r",
+							"\r",
+							"// OpenAPI verson test\r",
+							"pm.test(\"OpenAPI version is correct.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    test(\"openapi\", \"string\", \"3.0.3\");\r",
+							"});\r",
+							"\r",
+							"// Title test\r",
+							"pm.test(\"Info and title exists and contains YouToddler.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    test(\"info.title\", \"string\", \"YouToddler\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "f87ae4f3-b2ba-4e82-8d70-441b70214174"
+					}
+				}
+			],
+			"id": "03d1b9d5-bb91-4c08-8c6e-858fa65e6a55",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host_url}}/{{api_url}}/api-docs",
+					"host": [
+						"{{host_url}}"
+					],
+					"path": [
+						"{{api_url}}",
+						"api-docs"
+					]
+				},
+				"description": "This returns the Swagger definition documentation of the currently run API."
+			},
+			"response": []
+		},
+		{
+			"name": "Meta Ok Test A",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response is good.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response was successfull.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"URL is correct.\", function(){\r",
+							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_2\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Video title exists.\", function(){\r",
+							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest(\"videoName\", \"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Thumbnail URL exists.\", function(){\r",
+							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest(\"imageUrl\", \"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"id": "4a8b58ec-7e4e-4609-b69c-ebf3431c92cd"
+					}
+				}
+			],
+			"id": "3ea2216f-506d-4481-b7f4-e7462ead17f1",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host_url}}/{{api_url}}/meta?url={{test_vid_2}}",
+					"host": [
+						"{{host_url}}"
+					],
+					"path": [
+						"{{api_url}}",
+						"meta"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "{{test_vid_2}}"
+						}
+					]
+				},
+				"description": "This tests the Metadata request with the {{test_vid_2}} URL.\n\nChecks if the response is without error, and if it has a JSON body."
+			},
+			"response": []
+		},
+		{
+			"name": "Meta Ok Test B",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "60845989-fdb3-48a3-adf7-a5e938b90965",
+						"exec": [
+							"pm.test(\"Response is good.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response was successfull.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"URL is correct.\", function(){\r",
+							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest(\"url\", \"string\", pm.collectionVariables.get(\"test_vid_1\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Video title exists.\", function(){\r",
+							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ExtTest(\"videoName\", \"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "3f647c19-73cf-42a2-88c7-4b0cd0e14785",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host_url}}/{{api_url}}/meta?url={{test_vid_1}}",
+					"host": [
+						"{{host_url}}"
+					],
+					"path": [
+						"{{api_url}}",
+						"meta"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "{{test_vid_1}}"
+						}
+					]
+				},
+				"description": "This tests the Metadata request with the {{test_vid_1}} URL.\n\nChecks if the response is without error, and if it has a JSON body."
+			},
+			"response": []
+		},
+		{
+			"name": "Meta Bad Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response is an error.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"BasicErrorTest\"));\r",
+							"    test();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response code was correct.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test(400);\r",
+							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest(\"status\", \"number\", 400);\r",
+							"    ConTest(\"error\", \"string\", \"Bad Request\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"id": "1e7601f9-f66f-479b-9341-92073c1bc331"
+					}
+				}
+			],
+			"id": "3b040280-f341-4ee8-bd06-59ed535e6ec4",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host_url}}/{{api_url}}/meta",
+					"host": [
+						"{{host_url}}"
+					],
+					"path": [
+						"{{api_url}}",
+						"meta"
+					]
+				},
+				"description": "This tests the Metadata request without passing an url tag along with the request.\n\nChecks if the response is with the correct, `400: BAD_REQUEST` error, and if it is without a JSON body."
+			},
+			"response": []
+		},
+		{
+			"name": "Meta Not Acceptable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response is an error.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"BasicErrorTest\"));\r",
+							"    test();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response code was correct.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"StatusCodeNoBodyTest\"));\r",
+							"    test(406);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"id": "cb4cb312-0392-43b1-bad4-debef3d99d6a"
+					}
+				}
+			],
+			"id": "3e453308-25d3-46c2-9248-4e387765e946",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host_url}}/{{api_url}}/meta?url=",
+					"host": [
+						"{{host_url}}"
+					],
+					"path": [
+						"{{api_url}}",
+						"meta"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": ""
+						}
+					]
+				},
+				"description": "This tests the Metadata request without passing an url tag along with the request.\n\nChecks if the response is with the correct, `406: NOT_ACCEPTABLE` error, and if it is without a JSON body."
+			},
+			"response": []
+		},
+		{
+			"name": "Download Ok Test A",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response is good.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response was successfull.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"JSON response is not an error.\", function(){\r",
+							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest(\"code\", \"number\", 200);\r",
+							"    ConTest(\"type\", \"string\", \"base64\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"JSON response is base64 encoded.\", function(){\r",
+							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ConTest(\"type\", \"string\", \"base64\");\r",
+							"    ExtTest(\"message\", \"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "4f96c12b-05ee-41cd-b69d-026c2dae8391"
+					}
+				}
+			],
+			"id": "edb7ce13-fc46-49f5-b06d-ffc82798cff7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host_url}}/{{api_url}}/download?videoID={{test_id_2_av}}&audioID={{test_id_2_av}}&url={{test_vid_2}}",
+					"host": [
+						"{{host_url}}"
+					],
+					"path": [
+						"{{api_url}}",
+						"download"
+					],
+					"query": [
+						{
+							"key": "videoID",
+							"value": "{{test_id_2_av}}"
+						},
+						{
+							"key": "audioID",
+							"value": "{{test_id_2_av}}"
+						},
+						{
+							"key": "url",
+							"value": "{{test_vid_2}}"
+						}
+					]
+				},
+				"description": "This tests the Metadata request with the {{test_vid_2}} URL, and with the `{{test_id_2_?}}` ids.\n\nThe IDs can end with `_a` or `_v` or with `_av`, depending if it means an audio/video/audio-video-combined id.\n\nChecks if the response is without error, and if the message is encoded in base64."
+			},
+			"response": []
+		},
+		{
+			"name": "Download Ok Test B",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response is good.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"BasicOkTest\"));\r",
+							"    test();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response was successfull.\", function(){\r",
+							"    test = eval(pm.collectionVariables.get(\"StatusCodeWithBodyTest\"));\r",
+							"    test(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"JSON response is not an error.\", function(){\r",
+							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ConTest(\"code\", \"number\", 200);\r",
+							"    ConTest(\"type\", \"string\", \"base64\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"JSON response is base64 encoded.\", function(){\r",
+							"    ConTest = eval(pm.collectionVariables.get(\"JsonBodyContainTest\"));\r",
+							"    ExtTest = eval(pm.collectionVariables.get(\"JsonBodyExistTest\"));\r",
+							"    ConTest(\"type\", \"string\", \"base64\");\r",
+							"    ExtTest(\"message\", \"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "3e14f577-bc76-4fd0-a203-405a6260834b"
+					}
+				}
+			],
+			"id": "aacb9dc5-c6e9-4f59-b8c9-041acc583e77",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host_url}}/{{api_url}}/download?videoID={{test_id_1_av}}&audioID={{test_id_1_av}}&url={{test_vid_1}}",
+					"host": [
+						"{{host_url}}"
+					],
+					"path": [
+						"{{api_url}}",
+						"download"
+					],
+					"query": [
+						{
+							"key": "videoID",
+							"value": "{{test_id_1_av}}"
+						},
+						{
+							"key": "audioID",
+							"value": "{{test_id_1_av}}"
+						},
+						{
+							"key": "url",
+							"value": "{{test_vid_1}}"
+						}
+					]
+				},
+				"description": "This tests the Metadata request with the {{test_vid_1}} URL, and with the `{{test_id_1_?}}` ids.\n\nThe IDs can end with `_a` or `_v` or with `_av`, depending if it means an audio/video/audio-video-combined id.\n\nChecks if the response is without error, and if the message is encoded in base64."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Functions used for YouToddler Unit tests. Created by TheUsernameIsNotTaken (https://github.com/TheUsernameIsNotTaken)",
+					"",
+					"/* *************************** *",
+					" * ------- JSON FIELDS ------- *",
+					" * *************************** */",
+					"",
+					"",
+					"",
+					"/* *************************** *",
+					" * ----- TEST FUNCTIONS ------ *",
+					" * *************************** */",
+					"",
+					"// --- Status code checks",
+					"// basic status code and body exist check",
+					"let StatusCodeWithBodyTest = (statuscode) => {",
+					"    pm.response.to.have.status(statuscode);",
+					"    pm.response.to.be.withBody;",
+					"    pm.response.to.be.json;",
+					"};",
+					"pm.collectionVariables.set(\"StatusCodeWithBodyTest\", StatusCodeWithBodyTest.toString());",
+					"// basic status code without body check",
+					"let StatusCodeNoBodyTest = (statuscode) => {",
+					"    pm.response.to.have.status(statuscode);",
+					"    pm.response.to.not.be.withBody;",
+					"};",
+					"pm.collectionVariables.set(\"StatusCodeNoBodyTest\", StatusCodeNoBodyTest.toString());",
+					"",
+					"/* *************************** */",
+					"",
+					"// --- Error and OK checks",
+					"// basic error check",
+					"let BasicErrorTest = () => {",
+					"    pm.response.to.be.error;",
+					"};",
+					"pm.collectionVariables.set(\"BasicErrorTest\", BasicErrorTest.toString());",
+					"// besic ok check",
+					"let BasicOkTest = () => {",
+					"    pm.response.to.be.not.error;",
+					"};",
+					"pm.collectionVariables.set(\"BasicOkTest\", BasicOkTest.toString());",
+					"",
+					"/* *************************** */",
+					"",
+					"// --- JSON Body parts checks",
+					"// Json body part existence check",
+					"let JsonBodyExistTest = (varName, varType) => {",
+					"    pm.response.to.have.jsonBody(varName);",
+					"    let JsonVar = eval(\"() => {return pm.response.json().\" + varName + \"};\");",
+					"    pm.expect(JsonVar()).to.be.a(varType)",
+					"    if(varType != \"number\")",
+					"        pm.expect(JsonVar()).to.not.be.empty;",
+					"    pm.expect(JsonVar()).to.not.be.null;",
+					"};",
+					"pm.collectionVariables.set(\"JsonBodyExistTest\", JsonBodyExistTest.toString());",
+					"// Json body part content check",
+					"let JsonBodyContainTest = (varName, varType, value) => {",
+					"    pm.response.to.have.jsonBody(varName);",
+					"    let JsonVar = eval(\"() => {return pm.response.json().\" + varName + \"};\");",
+					"    if(varType == \"number\"){",
+					"        pm.expect(JsonVar()).to.not.be.null;",
+					"        pm.expect(JsonVar()).to.be.equal(value);",
+					"    }else{",
+					"        pm.expect(JsonVar()).to.not.be.empty;",
+					"        pm.expect(JsonVar()).to.contain(value);",
+					"    }",
+					"};",
+					"pm.collectionVariables.set(\"JsonBodyContainTest\", JsonBodyContainTest.toString());"
+				],
+				"id": "0f2eda60-6f84-41ef-970c-aaef4a1fd30e"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "b767080b-46ad-438a-bc5a-de6037692e0e"
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f44d380d-d680-499f-8f75-17239acf5684",
+			"key": "host_url",
+			"value": "http://localhost:9090",
+			"type": "string"
+		},
+		{
+			"id": "9e6cccf8-2972-4eeb-8a72-94f059d02f9a",
+			"key": "api_url",
+			"value": "api/v1",
+			"type": "string"
+		},
+		{
+			"id": "a13ab212-e387-4e20-a243-8ac7f41a1a78",
+			"key": "test_vid_1",
+			"value": "https://youtu.be/v1BDVbbxqp0",
+			"type": "string"
+		},
+		{
+			"id": "9763e889-cd7a-4755-843d-939d25b86fca",
+			"key": "test_id_1_av",
+			"value": "22",
+			"type": "string"
+		},
+		{
+			"id": "2e00d118-075a-47e8-b737-6728f1346d4f",
+			"key": "test_vid_2",
+			"value": "https://youtu.be/ue_7GwsB8TE",
+			"type": "string"
+		},
+		{
+			"id": "3e60cbad-3a26-4b6f-8639-b41a6041c1f1",
+			"key": "test_id_2_av",
+			"value": "17",
+			"type": "string"
+		},
+		{
+			"id": "2ac4c44f-b5b2-425b-a11e-a4f434ad3b58",
+			"key": "OkTest",
+			"value": ""
+		},
+		{
+			"id": "c6033a70-4048-4749-92a0-8b8a02aa2fc3",
+			"key": "NoErrorTest",
+			"value": ""
+		},
+		{
+			"id": "ea6ed5c0-f7cb-4296-9878-1c7eb2c09ba0",
+			"key": "RequestEncodedTest",
+			"value": ""
+		},
+		{
+			"id": "fb035af2-d76f-4f5e-98e5-c93f2106643d",
+			"key": "MessageCorrectTest",
+			"value": ""
+		},
+		{
+			"id": "0286c218-6e1f-4baa-a24e-149daa409054",
+			"key": "StatusCodeWithBodyTest",
+			"value": ""
+		},
+		{
+			"id": "9154c6ab-c00a-4a40-9dcf-ef811575b247",
+			"key": "StatusCodeNoBodyTest",
+			"value": ""
+		},
+		{
+			"id": "324b8cea-5c8d-4f6c-b4b5-c7c8074eec72",
+			"key": "BasicErrorTest",
+			"value": ""
+		},
+		{
+			"id": "68bde1b6-00bb-42ca-a1fe-8cb3d5663e90",
+			"key": "JsonBodyExistTest",
+			"value": ""
+		},
+		{
+			"id": "c92e83ad-1b35-4a15-bae9-cee75bfc779c",
+			"key": "JsonBodyContainTest",
+			"value": ""
+		},
+		{
+			"id": "d8c43448-96a2-4410-a87b-11b46d803be5",
+			"key": "BasicOkTest",
+			"value": ""
+		}
+	]
+}
