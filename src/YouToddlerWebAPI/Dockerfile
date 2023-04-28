@@ -1,12 +1,5 @@
 FROM eclipse-temurin:8-focal
 
-# We assume the project is already compiled
-COPY YouToddlerWebAPI/target/*.jar /webapi/
-COPY YouToddlerCLI/publish/* /webapi/
-
-WORKDIR /webapi/
-EXPOSE 9090
-
 # Setting up things
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -14,7 +7,6 @@ RUN apt-get update \
         ffmpeg \
         python3 python3-pip \
         ca-certificates \
-        \
         # .NET dependencies
         libc6 \
         libgcc1 \
@@ -30,3 +22,15 @@ RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -Channel 7.
 
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 RUN chmod a+rx /usr/local/bin/yt-dlp
+
+
+COPY YouToddlerWebAPI /build/
+WORKDIR /build/
+RUN chmod +x mvnw &&\
+    ./mvnw clean package spring-boot:repackage &&\
+    mkdir /webapi/ &&\
+    cp target/*.jar /webapi/
+COPY YouToddlerCLI/publish/* /webapi/
+
+WORKDIR /webapi/
+EXPOSE 9090

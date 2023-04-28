@@ -51,6 +51,9 @@
             "VSCode"
           ]
         },
+        "IsContainerBuild": {
+          "type": "boolean"
+        },
         "NoLogo": {
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
@@ -80,15 +83,9 @@
           "items": {
             "type": "string",
             "enum": [
-              "CompileAll",
-              "CompileBackend",
-              "CompileFrontend",
-              "CompileWebApi",
-              "PublishAll",
-              "ReleaseCli",
-              "ReleaseFrontend",
-              "ReleaseWebApi",
-              "ValidateCLI"
+              "BuildAll",
+              "BuildCli",
+              "PublishAll"
             ]
           }
         },
@@ -102,15 +99,9 @@
           "items": {
             "type": "string",
             "enum": [
-              "CompileAll",
-              "CompileBackend",
-              "CompileFrontend",
-              "CompileWebApi",
-              "PublishAll",
-              "ReleaseCli",
-              "ReleaseFrontend",
-              "ReleaseWebApi",
-              "ValidateCLI"
+              "BuildAll",
+              "BuildCli",
+              "PublishAll"
             ]
           }
         },
