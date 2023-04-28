@@ -5,7 +5,6 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Docker;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Docker.DockerTasks;
-using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 using Nuke.Common.CI.GitHubActions;
 using System;
 using System.IO;
@@ -74,7 +73,10 @@ partial class Build : NukeBuild
         .DependsOn(BuildCli)
         .Executes(() =>
         {
-            PowerShell(@$"-Command {{echo ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin}}", YouToddlerWebApiPath, logOutput: false, logInvocation: false);
+            DockerLogin(_ => _
+                .SetUsername(DOCKER_USERNAME)
+                .SetPassword(DOCKER_PASSWORD)
+                .DisableProcessLogOutput());
 
             DockerBuild(_ => _
                 .SetPath(RootDirectory / "src/")
@@ -94,8 +96,6 @@ partial class Build : NukeBuild
         .DependsOn(BuildAll)
         .Executes(() => 
         {
-            PowerShell(@$"-Command {{echo ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin}}", YouToddlerWebApiPath, logOutput: false, logInvocation: false);
-
             DockerPush(_ => _
                 .SetName("youtoddler/backend:latest"));
                 
