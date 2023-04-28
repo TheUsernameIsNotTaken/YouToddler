@@ -16,6 +16,7 @@ using Nuke.Common.Tooling;
     GitHubActionsImage.Ubuntu2204,
     InvokedTargets = new[] {nameof(PublishAll)},
     OnCronSchedule = "* 0 * * *",
+    OnWorkflowDispatchOptionalInputs = new[] {""},
     ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
     AutoGenerate = true
 )]
@@ -86,6 +87,8 @@ partial class Build : NukeBuild
         .DependsOn(BuildAll)
         .Executes(() => 
         {
+            PowerShell(@$"-Command {{echo ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin}}", YouToddlerWebApiPath, logOutput: false, logInvocation: false);
+            
             DockerPush(_ => _
                 .SetName("youtoddler/backend:latest"));
                 

@@ -17,6 +17,11 @@
 name: build-all-and-validate-nightly
 
 on:
+  workflow_dispatch:
+    inputs:
+      :
+        description: ""
+        required: false
   schedule:
     - cron: '* 0 * * *'
 
@@ -36,5 +41,6 @@ jobs:
       - name: Run './build.cmd PublishAll'
         run: ./build.cmd PublishAll
         env:
+          : ${{ github.event.inputs. }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
