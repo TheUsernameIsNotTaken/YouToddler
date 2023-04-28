@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "f2c5b23c-1f57-4f0a-9402-520646560ce2",
+		"_postman_id": "17c1fff4-5ad5-465a-bea2-56330cd72b7e",
 		"name": "YouToddler Test",
 		"description": "## Introduction\n\nYouToddler is an open-source YouTube downloader API passion project by 4 collage students from UniDeb.\n\nThe API is defined with [Swagger](https://editor.swagger.io), and it's definition are always available, by calling {{host_url}}/{{api_url}}/api-docs (the Get Swagger Documentation call) in your browser any time.\n\n## About the API\n\nIt is a REST API, so keeping the standard principles are always desired. Meaning It MUST HAVE Uniform interface, MUST HAVE Client-server decoupling, MUST BE Stateless, SHOULD HAVE Cacheability, MUST BE prepared for Layered system architecture, and COULD support code on demand. More infromation [here](https://www.ibm.com/topics/rest-apis).\n\n## Data models\n\n### Metadata Object\n\n``` json\n{\n  \"url\": \"https://youtu.be/dQw4w9WgXcQ\",\n  \"videoName\": \"Example Name gone wrong! | !!!NOT CLICKBAIT!!!\",\n  \"imageUrl\": \"https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg\",\n  \"formats\": [\n    { ... format_1 ... },\n    { ... format_2 ... } ...\n  ]\n}\n\n```\n\n### Format object\n\n[Link to original definition.](https://manhatten.atlassian.net/wiki/spaces/AT/pages/4161559/Video+audio+formats#JSON)\n\n``` json\n{\n  \"id\": 22,\n  \"name\": \"mp4\",\n  \"resolution\": { ... resolution data ... }\n}\n\n```\n\n### Resolution Object\n\n``` json\n\"resolution\": {\n  \"video\": { ... Videoresolution ... },\n  \"audio\": { ... Audio resolution ... },\n  \"filesize\": 8497,\n  \"tbr\": 446000\n}\n\n```\n\n### Video Resolution Object\n\n``` json\n\"video\": {\n  \"videoCodec\": \"avc1\",\n  \"fps\": 30,\n  \"vbr\": 446000\n}\n\n```\n\n### Audio Resolution Object\n\n``` json\n\"audio\": {\n  \"audioCodec\": \"mp4a\",\n  \"abr\": 0\n}\n\n```\n\n### ApiResponse Object\n\n``` javascript\n{\n    \"code\": 200,\n    \"type\": \"base64\",\n    \"message\":  \"UEsDBBQAAAAAADZchVYAAAAAAAAAAAAAAAAHAAAAVmlkZWpvL1BLA\n                 wQUAAAACAAxXIVWH6qfaPtdOwCe1zsARAAAAFZpZGVqby9yYXBpZH\n                 NhdmUuY29tX2V6X2F6X3J1bHRfa3VyYWZpX21lZ2NzaW5hbHRhLWV...\n}\n\n```",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_uid": "11115367-f2c5b23c-1f57-4f0a-9402-520646560ce2"
+		"_uid": "11115367-17c1fff4-5ad5-465a-bea2-56330cd72b7e"
 	},
 	"item": [
 		{
@@ -13,7 +13,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f87ae4f3-b2ba-4e82-8d70-441b70214174",
+						"id": "b4b1a843-d4ac-4e0b-b128-ab79070d728d",
 						"exec": [
 							"// Succesfull response test\r",
 							"pm.test(\"Response was successfull.\", function(){\r",
@@ -37,7 +37,7 @@
 					}
 				}
 			],
-			"id": "03d1b9d5-bb91-4c08-8c6e-858fa65e6a55",
+			"id": "e418c634-bd27-4a20-a808-04d9c21996aa",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -70,7 +70,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4a8b58ec-7e4e-4609-b69c-ebf3431c92cd",
+						"id": "f9ca0293-a098-4a3f-81c7-0a892b08a0e2",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
 							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
@@ -102,7 +102,7 @@
 					}
 				}
 			],
-			"id": "3ea2216f-506d-4481-b7f4-e7462ead17f1",
+			"id": "86882eb2-8ebf-4262-88ec-9fb1b1e0405c",
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {},
 				"disableBodyPruning": true
@@ -142,7 +142,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "60845989-fdb3-48a3-adf7-a5e938b90965",
+						"id": "b545c374-d63f-407c-997b-98300a256624",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
 							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
@@ -169,7 +169,7 @@
 					}
 				}
 			],
-			"id": "3f647c19-73cf-42a2-88c7-4b0cd0e14785",
+			"id": "05f083ab-3fc7-4a04-a129-6f2479230028",
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {},
 				"disableBodyPruning": true
@@ -209,7 +209,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1e7601f9-f66f-479b-9341-92073c1bc331",
+						"id": "b3f5875e-89ec-436d-bf27-b4dcb73a000e",
 						"exec": [
 							"pm.test(\"Response is an error.\", function(){\r",
 							"    test = eval(pm.environment.get(\"BasicErrorTest\"));\r",
@@ -229,7 +229,7 @@
 					}
 				}
 			],
-			"id": "3b040280-f341-4ee8-bd06-59ed535e6ec4",
+			"id": "cc861e7c-b487-4f16-94dc-1d88e910e481",
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {},
 				"disableBodyPruning": true
@@ -263,7 +263,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "cb4cb312-0392-43b1-bad4-debef3d99d6a",
+						"id": "9301fca3-d5b7-4619-9b21-52396d72360b",
 						"exec": [
 							"pm.test(\"Response is an error.\", function(){\r",
 							"    test = eval(pm.environment.get(\"BasicErrorTest\"));\r",
@@ -282,7 +282,7 @@
 					}
 				}
 			],
-			"id": "3e453308-25d3-46c2-9248-4e387765e946",
+			"id": "a01addc3-8978-40f2-a84b-08f7d81ed5f4",
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {},
 				"disableBodyPruning": true
@@ -322,7 +322,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4f96c12b-05ee-41cd-b69d-026c2dae8391",
+						"id": "7de01e15-af34-4ff4-8d61-6db9430c9f77",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
 							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
@@ -351,7 +351,7 @@
 					}
 				}
 			],
-			"id": "edb7ce13-fc46-49f5-b06d-ffc82798cff7",
+			"id": "11bd571e-9256-4d5c-84ec-4c117f8b7af6",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -398,7 +398,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "3e14f577-bc76-4fd0-a203-405a6260834b",
+						"id": "b1549301-b57f-4135-8309-e203d571af98",
 						"exec": [
 							"pm.test(\"Response is good.\", function(){\r",
 							"    test = eval(pm.environment.get(\"BasicOkTest\"));\r",
@@ -427,7 +427,7 @@
 					}
 				}
 			],
-			"id": "aacb9dc5-c6e9-4f59-b8c9-041acc583e77",
+			"id": "a6bcae41-9057-4019-9e06-5c606c1f3801",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -473,7 +473,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "c6f9000c-9a1f-4313-aa97-9e09cedd7ea7",
+				"id": "9e2bbdfc-0f0d-4d96-bca1-197388fcd0a1",
 				"type": "text/javascript",
 				"exec": [
 					"// Functions used for YouToddler Unit tests. Created by TheUsernameIsNotTaken (https://github.com/TheUsernameIsNotTaken)",
@@ -549,7 +549,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "f1eef7bc-b897-4a57-b4bf-c8eb4525e9f4",
+				"id": "6664c865-0d08-4ef1-931f-7b24a5ff337f",
 				"type": "text/javascript",
 				"exec": [
 					""
