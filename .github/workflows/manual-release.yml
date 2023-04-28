@@ -9,16 +9,14 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         nuke --generate-configuration GitHubActions_build-all-and-validate-nightly --host GitHubActions
+#         nuke --generate-configuration GitHubActions_manual-release --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
 
-name: build-all-and-validate-nightly
+name: manual-release
 
-on:
-  schedule:
-    - cron: '* 0 * * *'
+on: [workflow_dispatch]
 
 jobs:
   ubuntu-22_04:

@@ -12,11 +12,18 @@ using System.IO;
 using Nuke.Common.Tooling;
 
 [GitHubActions(
+    "manual-release",
+    GitHubActionsImage.Ubuntu2204,
+    InvokedTargets = new[] {nameof(PublishAll)},
+    On = new[] { GitHubActionsTrigger.WorkflowDispatch },
+    ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
+    AutoGenerate = true
+)]
+[GitHubActions(
     "build-all-and-validate-nightly",
     GitHubActionsImage.Ubuntu2204,
     InvokedTargets = new[] {nameof(PublishAll)},
     OnCronSchedule = "* 0 * * *",
-    OnWorkflowDispatchOptionalInputs = new[] {""},
     ImportSecrets = new[] {nameof(DOCKER_USERNAME), nameof(DOCKER_PASSWORD)},
     AutoGenerate = true
 )]
@@ -88,7 +95,7 @@ partial class Build : NukeBuild
         .Executes(() => 
         {
             PowerShell(@$"-Command {{echo ""{DOCKER_PASSWORD}"" > docker login -u {DOCKER_USERNAME} --password-stdin}}", YouToddlerWebApiPath, logOutput: false, logInvocation: false);
-            
+
             DockerPush(_ => _
                 .SetName("youtoddler/backend:latest"));
                 
