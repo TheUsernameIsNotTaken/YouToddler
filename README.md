@@ -1,5 +1,6 @@
 # YouToddler
-[![build-all-and-validate-nightly](https://github.com/cant0r/YouToddler/actions/workflows/build-all-and-validate-nightly.yml/badge.svg)](https://github.com/cant0r/YouToddler/actions/workflows/build-all-and-validate-nightly.yml)  
+[![build-all-and-validate-nightly](https://github.com/cant0r/YouToddler/actions/workflows/build-all-and-validate-nightly.yml/badge.svg)](https://github.com/cant0r/YouToddler/actions/workflows/build-all-and-validate-nightly.yml)
+[![manual-release](https://github.com/cant0r/YouToddler/actions/workflows/manual-release.yml/badge.svg)](https://github.com/cant0r/YouToddler/actions/workflows/manual-release.yml)   
 Group project of the people of the Manhattan Project.
 
 ## Description
@@ -12,7 +13,6 @@ You can either build the project yourself or use the prebuilt Docker images.
 1. Make sure you have [Docker](https://www.docker.com/) installed on your system.   
 2. Change directory to the project's root direectory
 3. Execute `docker compose up`
-4. When you're inside the shell execute `java -jar youtoddler-spring-0.7.2.jar`
 
 You can access the Frontend at <http://localhost:8080>.   
 You can access the Swagger Documentation at <http://localhost:9090>.   
