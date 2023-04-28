@@ -33,7 +33,7 @@ externalDocs:
   url: >-
     https://manhatten.atlassian.net/wiki/spaces/AT/pages/1572865/Project+YouToddler+-+An+on-premise+download+manager+for+youtube-dlp+--+RFC
 servers:
-  - url: http://ytoddl.er/api/v1
+  - url: http://localhost:9090/api/v1
 tags:
   - name: meta
     description: Everything about a specific video
